@@ -1,21 +1,21 @@
 #pragma once
 
-#include <iostream>
 #include <string>
 #include <vector>
+#include "ObjectBD.h"
 using namespace std;
 
 class DataBaseManager
 {
 private:
 	int id;
-	//vector<Product> product  
+	/*vector<ObjectBD> ObjectsBD;*/
 public:
 	DataBaseManager(const string& name, int id);
 	~DataBaseManager();
 
-	int getId();
-	/*Product getProducts(int i);*/
+	int getId() const;
+	/*ObjectBD getObjectBD(int i);*/
 
-	void recordProduct(const string& text);
+	void recordObjectBD(const ObjectBD& ObjectBD);
 };

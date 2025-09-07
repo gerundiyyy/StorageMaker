@@ -127,11 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsolUI.cpp" />
     <ClCompile Include="DataBaseManager.cpp" />
-    <ClCompile Include="StorageMaker.cpp" />
+    <ClCompile Include="ObjectBD.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsolUI.h" />
     <ClInclude Include="DataBaseManager.h" />
+    <ClInclude Include="ObjectBD.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="product_data.txt" />
