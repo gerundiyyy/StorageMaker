@@ -5,15 +5,8 @@
 using namespace std;
 
 //Constructor and Destructors
-ObjectBD::ObjectBD(int id, const string& name, int quantity, double price, const string& date, const string& registeredBy)
+ObjectBD::ObjectBD()
 {
-	this->id = id;
-	this->name = name;
-	this->quantity = quantity;
-	this->price = price;
-	this->date = date;
-	this->registeredBy = registeredBy;
-
 	cout << "ObjectBD has been created!" << endl;
 }
 
@@ -23,6 +16,10 @@ ObjectBD::~ObjectBD()
 }
 
 //Setters
+void ObjectBD::setId(int id)
+{
+	this->id = id;
+}
 void ObjectBD::setName(const string& name)
 {
 	this->name = name;

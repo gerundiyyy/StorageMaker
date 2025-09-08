@@ -12,9 +12,10 @@ private:
 	string date;
 	string registeredBy;
 public:
-	ObjectBD(int id, const string& name, int quantity, double price, const string& date, const string& registeredBy);
+	ObjectBD();
 	~ObjectBD();
 
+	void setId(int id);
 	void setName(const string& name);
 	void setQuantity(int quantity);
 	void setPrice(double price);
