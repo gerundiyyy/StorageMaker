@@ -9,13 +9,11 @@ class DataBaseManager
 {
 private:
 	int id;
-	/*vector<ObjectBD> ObjectsBD;*/
 public:
-	DataBaseManager(const string& name, int id);
+	DataBaseManager(int id);
 	~DataBaseManager();
 
 	int getId() const;
-	/*ObjectBD getObjectBD(int i);*/
 
 	void recordObjectBD(const ObjectBD& ObjectBD);
 };

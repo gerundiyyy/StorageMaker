@@ -6,7 +6,7 @@
 using namespace std;
 
 //Construtors and Destructors
-DataBaseManager::DataBaseManager(const string& name, int id)
+DataBaseManager::DataBaseManager(int id)
 {
 	this->id = id;
 	cout << "DataBaseManager has been created!" << endl;
@@ -22,11 +22,6 @@ int DataBaseManager::getId() const
 {
 	return id;
 }
-
-//ObjectBD DataBaseManager::getObjectBD(int i)
-//{
-//	return this->ObjectsBD[i];
-//}
 
 //Special 
 void DataBaseManager::recordObjectBD(const ObjectBD& ObjectBD)

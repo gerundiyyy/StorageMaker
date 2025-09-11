@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsolInput.cpp" />
     <ClCompile Include="ConsolUI.cpp" />
     <ClCompile Include="DataBaseManager.cpp" />
     <ClCompile Include="ObjectBD.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsolInput.h" />
     <ClInclude Include="ConsolUI.h" />
     <ClInclude Include="DataBaseManager.h" />
     <ClInclude Include="ObjectBD.h" />
