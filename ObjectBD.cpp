@@ -5,15 +5,15 @@
 using namespace std;
 
 //Constructor and Destructors
-ObjectBD::ObjectBD()
-{
-	cout << "ObjectBD has been created!" << endl;
-}
-
-ObjectBD::~ObjectBD()
-{
-	cout << "ObjectBD has been deleted!" << endl;
-}
+//ObjectBD::ObjectBD()
+//{
+//	cout << "ObjectBD has been created!" << endl;
+//}
+//
+//ObjectBD::~ObjectBD()
+//{
+//	cout << "ObjectBD has been deleted!" << endl;
+//}
 
 //Setters
 void ObjectBD::setId(int id)
@@ -65,4 +65,26 @@ string ObjectBD::getDate() const
 string ObjectBD::getRegisteredBy() const
 {
 	return registeredBy;
+}
+
+string ObjectBD::toText() const 
+{
+	return "id: " + to_string(id) + "\n" +
+		"Имя: " + name + "\n" +
+		"Количество: " + to_string(quantity) + "\n" +
+		"Цена: " + to_string(price) + "\n" +
+		"Дата регистрации: " + date + "\n" +
+		"Кто зарегистрировал: " + registeredBy + "\n"
+		"===\n";
+}
+
+void ObjectBD::print() const
+{
+	cout << "id: " << id << "\n"
+		<< "Имя: " << name << "\n"
+		<< "Количество: " << quantity << "\n"
+		<< "Цена: " << price << "\n"
+		<< "Дата регистрации: " << date << "\n"
+		<< "Кто зарегистрировал: " << registeredBy << "\n"
+		<< "===\n";
 }

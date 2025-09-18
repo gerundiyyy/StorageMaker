@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include "ObjectBD.h"
-using namespace std;
 
 class DataBaseManager
 {
@@ -15,5 +14,9 @@ public:
 
 	int getId() const;
 
-	void recordObjectBD(const ObjectBD& ObjectBD);
+	int toInt(const std::string& inputObject);
+	double toDouble(const std::string& inputObject);
+	void recordObjectBD(const ObjectBD& obj);
+	std::vector <ObjectBD> readObjectBD();
+	ObjectBD parseObject(const std::vector<std::string>& lines);
 };

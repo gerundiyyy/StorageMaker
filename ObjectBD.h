@@ -1,31 +1,34 @@
 #pragma once
 #include <string>
-using namespace std;
 
 class ObjectBD
 {
 private:
 	int id;
-	string name;
+	std::string name;
 	int quantity;
 	double price;
-	string date;
-	string registeredBy;
+	std::string date;
+	std::string registeredBy;
 public:
-	ObjectBD();
-	~ObjectBD();
+	//ObjectBD();
+	//~ObjectBD();
 
 	void setId(int id);
-	void setName(const string& name);
+	void setName(const std::string& name);
 	void setQuantity(int quantity);
 	void setPrice(double price);
-	void setDate(const string& date);
-	void setRegisteredBy(const string& registeredBy);
+	void setDate(const std::string& date);
+	void setRegisteredBy(const std::string& registeredBy);
 
 	int getId() const;
-	string getName() const;
+	std::string getName() const;
 	int getQuantity() const;
 	double getPrice() const;
-	string getDate() const;
-	string getRegisteredBy() const;
+	std::string getDate() const;
+	std::string getRegisteredBy() const;
+
+	std::string toText() const;
+	std::string parseObject(const std::vector<std::string>& lines);
+	void print() const;
 };

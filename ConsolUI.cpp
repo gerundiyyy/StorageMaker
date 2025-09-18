@@ -2,6 +2,7 @@
 #include <string>
 #include "ConsolUI.h"
 #include "ConsolInput.h"
+#include "DataBaseManager.h"
 
 using namespace std;
 void ConsolUI::coutMenu()
@@ -37,8 +38,14 @@ void ConsolUI::showMenu()
 				system("pause");
 				break;
 			case 2:
-				cout << "Выполняю задание!" << endl;
+			{
+				DataBaseManager* bd = new DataBaseManager(1);
+				bd->readObjectBD();
+
+				delete bd;
 				break;
+			}
+				
 			case 3:
 				cout << "Выполняю задание!" << endl;
 				break;
