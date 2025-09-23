@@ -5,15 +5,12 @@
 using namespace std;
 
 //Constructor and Destructors
-//ObjectBD::ObjectBD()
-//{
-//	cout << "ObjectBD has been created!" << endl;
-//}
-//
-//ObjectBD::~ObjectBD()
-//{
-//	cout << "ObjectBD has been deleted!" << endl;
-//}
+ObjectBD::ObjectBD(int id)
+	: id(id), name("None"), quantity(0), price(0),
+	date("01-01-2000"), registeredBy("None") {}
+ObjectBD::ObjectBD()
+	: id(0), name("None"), quantity(0), price(0),
+	date("01-01-2000"), registeredBy("None") {}
 
 //Setters
 void ObjectBD::setId(int id)

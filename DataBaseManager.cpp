@@ -7,22 +7,9 @@
 #include "ObjectBD.h"
 using namespace std;
 
-//Construtors and Destructors
-DataBaseManager::DataBaseManager(int id)
+int DataBaseManager::getLastId() const
 {
-	this->id = id;
-	cout << "DataBaseManager has been created!" << endl;
-}
-
-DataBaseManager::~DataBaseManager()
-{
-	cout << "DataBaseManager has been deleted!" << endl;
-}
-
-//Getters
-int DataBaseManager::getId() const
-{
-	return id;
+	return lastId;
 }
 
 //Special 
@@ -53,7 +40,7 @@ double DataBaseManager::toDouble(const string& inputObject)
 	return doubleObject;
 }
 
-ObjectBD DataBaseManager::parseObject(const std::vector<std::string>& lines)
+ObjectBD DataBaseManager::parseObject(const vector<string>& lines)
 {
 	ObjectBD obj;
 	for (const auto& line : lines)
@@ -72,7 +59,7 @@ ObjectBD DataBaseManager::parseObject(const std::vector<std::string>& lines)
 			obj.setRegisteredBy(line.substr(21));
 	}
 	return obj;
-}
+}	
 
 vector <ObjectBD> DataBaseManager::readObjectBD()
 {
@@ -92,7 +79,7 @@ vector <ObjectBD> DataBaseManager::readObjectBD()
 			buffer.clear();
 
 			cout << "Объект добавлен!" << endl;
-			obj.print();
+			/*obj.print();*/
 		}
 		else buffer.push_back(line);
 	}

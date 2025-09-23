@@ -11,8 +11,8 @@ private:
 	std::string date;
 	std::string registeredBy;
 public:
-	//ObjectBD();
-	//~ObjectBD();
+	ObjectBD(int id);
+	ObjectBD();
 
 	void setId(int id);
 	void setName(const std::string& name);
@@ -29,6 +29,5 @@ public:
 	std::string getRegisteredBy() const;
 
 	std::string toText() const;
-	std::string parseObject(const std::vector<std::string>& lines);
 	void print() const;
 };

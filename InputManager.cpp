@@ -5,12 +5,26 @@
 #include <stdlib.h>
 #include "DataBaseManager.h"
 #include "ObjectBD.h"
-#include "ConsolInput.h"
+#include "InputManager.h"
 
 using namespace std;
 
+//Errors
+void InputManager::intError()
+{
+	cout << "Ошибка! Пожалуйста, введите целое число: ";
+}
+void InputManager::doubleError()
+{
+	cout << "Ошибка! Пожалуйста, введите число: ";
+}
+void InputManager::voidError()
+{
+	cout << "Ошибка! Пожалуйста, введите значение: ";
+}
+
 //Checks and converters
-int ConsolInput::toInt(const string& inputObject)
+int InputManager::toInt(const string& inputObject)
 {
 	stringstream isString(inputObject);
 	int intObject;
@@ -18,7 +32,7 @@ int ConsolInput::toInt(const string& inputObject)
 	return intObject;
 }
 
-double ConsolInput::toDouble(const string& inputObject)
+double InputManager::toDouble(const string& inputObject)
 {
 	stringstream isString(inputObject);
 	double doubleObject;
@@ -26,7 +40,7 @@ double ConsolInput::toDouble(const string& inputObject)
 	return doubleObject;
 }
 
-bool ConsolInput::isInt(const string& inputObject)
+bool InputManager::isInt(const string& inputObject)
 {
 	stringstream isString(inputObject);
 	double isDouble;
@@ -38,18 +52,18 @@ bool ConsolInput::isInt(const string& inputObject)
 		}
 		else
 		{
-			cout << "Ошибка! Пожалуйста, введите целое число: ";
+			intError();
 			return false;
 		}
 	}
 	else
 	{
-		cout << "Ошибка! Пожалуйста, введите число: ";
+		doubleError();
 		return false;
 	}
 }
 
-bool ConsolInput::isDouble(const string& inputObject)
+bool InputManager::isDouble(const string& inputObject)
 {
 	stringstream isString(inputObject);
 	double isDouble;
@@ -59,14 +73,14 @@ bool ConsolInput::isDouble(const string& inputObject)
 	}
 	else
 	{
-		cout << "Ошибка! Пожалуйста, введите число: ";
+		doubleError();
 		return false;
 	}
 }
 
 //Inputs
 
-int ConsolInput::inputObjectId()
+int InputManager::inputObjectId()
 {
 	string objectId;
 	while (true)
@@ -77,20 +91,20 @@ int ConsolInput::inputObjectId()
 	return toInt(objectId);
 }
 
-string ConsolInput::inputObjectName()
+string InputManager::inputObjectName()
 {
 	string objectName;
 	while (true)
 	{
 		getline(cin, objectName);
 		if (!(objectName.empty())) break;
-		else cout << "Ошибка! Пожалуйста, введите имя: ";
+		else voidError();
 	}
 
 	return objectName;
 }
 
-int ConsolInput::inputObjectQuantity()
+int InputManager::inputObjectQuantity()
 {
 	string objectQuantity;
 	while (true)
@@ -101,7 +115,7 @@ int ConsolInput::inputObjectQuantity()
 	return toInt(objectQuantity);
 }
 
-double ConsolInput::inputObjectPrice()
+double InputManager::inputObjectPrice()
 {
 	string objectPrice;
 	while (true)
@@ -112,41 +126,45 @@ double ConsolInput::inputObjectPrice()
 	return toDouble(objectPrice);
 }
 
-string ConsolInput::inputObjectDate()
+string InputManager::inputObjectDate()
 {
 	string objectDate;
 	getline(cin, objectDate);
 	return objectDate;
 }
 
-string ConsolInput::inputObjectRegisteredBy()
+string InputManager::inputObjectRegisteredBy()
 {
 	string objectRegisteredBy;
 	getline(cin, objectRegisteredBy);
 	return objectRegisteredBy;
 }
 
-void ConsolInput::inputFullObject()
+ObjectBD InputManager::inputFullObject()
 {
-	DataBaseManager* DataBaseManager1 = new DataBaseManager(1);
-	ObjectBD* inputObjectBD = new ObjectBD();
+	ObjectBD inputObjectBD;
 
 	cout << "id: ";
-	inputObjectBD->setId(inputObjectId());
+	inputObjectBD.setId(inputObjectId());
 	cout << "Имя: ";
-	inputObjectBD->setName(inputObjectName());
+	inputObjectBD.setName(inputObjectName());
 	cout << "Количество: ";
-	inputObjectBD->setQuantity(inputObjectQuantity());
+	inputObjectBD.setQuantity(inputObjectQuantity());
 	cout << "Цена: ";
-	inputObjectBD->setPrice(inputObjectPrice());
+	inputObjectBD.setPrice(inputObjectPrice());
 	cout << "Дата регистрации: ";
-	inputObjectBD->setDate(inputObjectDate());
+	inputObjectBD.setDate(inputObjectDate());
 	cout << "Кто зарегестрировал: ";
-	inputObjectBD->setRegisteredBy(inputObjectRegisteredBy());
+	inputObjectBD.setRegisteredBy(inputObjectRegisteredBy());
 	cout << endl;
 
-	DataBaseManager1->recordObjectBD(*inputObjectBD);
+	return inputObjectBD;
+}
 
-	delete inputObjectBD;
-	delete DataBaseManager1;
+int InputManager::inputMenu()
+{
+	string menuChoice;
+	getline(cin, menuChoice);
+	if (isInt(menuChoice)) return toInt(menuChoice);
+	else intError();
 }
