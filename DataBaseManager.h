@@ -3,17 +3,18 @@
 #include <string>
 #include <vector>
 #include "ObjectBD.h"
-using namespace std;
 
 class DataBaseManager
 {
 private:
-	int id;
+	int lastId;
+
+	int toInt(const std::string& inputObject);
+	double toDouble(const std::string& inputObject);
 public:
-	DataBaseManager(int id);
-	~DataBaseManager();
+	int getLastId() const;
 
-	int getId() const;
-
-	void recordObjectBD(const ObjectBD& ObjectBD);
+	void recordObjectBD(const ObjectBD& obj);
+	std::vector <ObjectBD> readObjectBD();
+	ObjectBD parseObject(const std::vector<std::string>& lines);
 };

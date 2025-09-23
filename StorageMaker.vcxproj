@@ -127,16 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ConsolInput.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="ConsolUI.cpp" />
     <ClCompile Include="DataBaseManager.cpp" />
     <ClCompile Include="ObjectBD.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Storage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConsolInput.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="ConsolUI.h" />
     <ClInclude Include="DataBaseManager.h" />
+    <ClInclude Include="App.h" />
+    <ClInclude Include="Storage.h" />
     <ClInclude Include="ObjectBD.h" />
   </ItemGroup>
   <ItemGroup>
