@@ -5,24 +5,18 @@
 using namespace std;
 
 //Constructor and Destructors
-ObjectBD::ObjectBD(int id, const string& name, int quantity, double price, const string& date, const string& registeredBy)
-{
-	this->id = id;
-	this->name = name;
-	this->quantity = quantity;
-	this->price = price;
-	this->date = date;
-	this->registeredBy = registeredBy;
-
-	cout << "ObjectBD has been created!" << endl;
-}
-
-ObjectBD::~ObjectBD()
-{
-	cout << "ObjectBD has been deleted!" << endl;
-}
+ObjectBD::ObjectBD(int id)
+	: id(id), name("None"), quantity(0), price(0),
+	date("01-01-2000"), registeredBy("None") {}
+ObjectBD::ObjectBD()
+	: id(0), name("None"), quantity(0), price(0),
+	date("01-01-2000"), registeredBy("None") {}
 
 //Setters
+void ObjectBD::setId(int id)
+{
+	this->id = id;
+}
 void ObjectBD::setName(const string& name)
 {
 	this->name = name;
@@ -68,4 +62,26 @@ string ObjectBD::getDate() const
 string ObjectBD::getRegisteredBy() const
 {
 	return registeredBy;
+}
+
+string ObjectBD::toText() const 
+{
+	return "id: " + to_string(id) + "\n" +
+		"Имя: " + name + "\n" +
+		"Количество: " + to_string(quantity) + "\n" +
+		"Цена: " + to_string(price) + "\n" +
+		"Дата регистрации: " + date + "\n" +
+		"Кто зарегистрировал: " + registeredBy + "\n"
+		"===\n";
+}
+
+void ObjectBD::print() const
+{
+	cout << "id: " << id << "\n"
+		<< "Имя: " << name << "\n"
+		<< "Количество: " << quantity << "\n"
+		<< "Цена: " << price << "\n"
+		<< "Дата регистрации: " << date << "\n"
+		<< "Кто зарегистрировал: " << registeredBy << "\n"
+		<< "===\n";
 }
