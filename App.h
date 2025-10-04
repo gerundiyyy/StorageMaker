@@ -11,7 +11,7 @@
 class App
 {
 private:
-	DataBaseManager db;
+	DataBaseManager bd;
 	Storage storage;
 	ConsolUI ui;
 	InputManager in;
@@ -23,7 +23,7 @@ public:
 	void authorization();
 	void record();
 	void deleteObj();
-	void printAll();
+	void output();
 	void search();
 
 	void run();

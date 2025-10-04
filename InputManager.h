@@ -7,7 +7,7 @@ using namespace std;
 class InputManager
 {
 private:
-	/*int inputObjectId();*/
+	int inputObjectId();
 	string inputObjectName();
 	int inputObjectQuantity();
 	double inputObjectPrice();
@@ -25,6 +25,6 @@ public:
 	bool isDouble(const string& inputObject);
 
 	int inputMenu();
-	ObjectBD inputFullObject(int id);
+	ObjectBD inputFullObject();
 };
 

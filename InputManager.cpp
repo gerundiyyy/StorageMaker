@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <regex>
+#include <stdlib.h>
 #include "DataBaseManager.h"
 #include "ObjectBD.h"
 #include "InputManager.h"
@@ -79,16 +80,16 @@ bool InputManager::isDouble(const string& inputObject)
 
 //Inputs
 
-//int InputManager::inputObjectId()
-//{
-//	string objectId;
-//	while (true)
-//	{
-//		getline(cin, objectId);
-//		if (isInt(objectId) && !(objectId.empty())) break;
-//	}
-//	return toInt(objectId);
-//}
+int InputManager::inputObjectId()
+{
+	string objectId;
+	while (true)
+	{
+		getline(cin, objectId);
+		if (isInt(objectId) && !(objectId.empty())) break;
+	}
+	return toInt(objectId);
+}
 
 string InputManager::inputObjectName()
 {
@@ -139,12 +140,12 @@ string InputManager::inputObjectRegisteredBy()
 	return objectRegisteredBy;
 }
 
-ObjectBD InputManager::inputFullObject(int id)
+ObjectBD InputManager::inputFullObject()
 {
 	ObjectBD inputObjectBD;
 
-	/*cout << "id: ";*/
-	inputObjectBD.setId(id);
+	cout << "id: ";
+	inputObjectBD.setId(inputObjectId());
 	cout << "Имя: ";
 	inputObjectBD.setName(inputObjectName());
 	cout << "Количество: ";
