@@ -127,24 +127,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="ConsolUI.cpp" />
-    <ClCompile Include="DataBaseManager.cpp" />
-    <ClCompile Include="ObjectBD.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="Storage.cpp" />
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\ConsolUI.cpp" />
+    <ClCompile Include="src\DataBaseManager.cpp" />
+    <ClCompile Include="src\InputManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ObjectBD.cpp" />
+    <ClCompile Include="src\Storage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="ConsolUI.h" />
-    <ClInclude Include="DataBaseManager.h" />
-    <ClInclude Include="App.h" />
-    <ClInclude Include="Storage.h" />
-    <ClInclude Include="ObjectBD.h" />
+    <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\ConsolUI.h" />
+    <ClInclude Include="src\DataBaseManager.h" />
+    <ClInclude Include="src\InputManager.h" />
+    <ClInclude Include="src\ObjectBD.h" />
+    <ClInclude Include="src\Storage.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="product_data.txt" />
+    <Text Include="data\product_data.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

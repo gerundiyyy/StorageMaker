@@ -12,6 +12,11 @@ int DataBaseManager::getLastId() const
 	return lastId;
 }
 
+void DataBaseManager::setLastId(int lastId) 
+{
+	this->lastId= lastId;
+}
+
 //Special 
 
 int DataBaseManager::toInt(const string& inputObject)
@@ -21,15 +26,14 @@ int DataBaseManager::toInt(const string& inputObject)
 	isString >> intObject;
 	return intObject;
 }
-
-void DataBaseManager::recordObjectBD(const ObjectBD& obj) 
+void DataBaseManager::recordObjectBD(const ObjectBD& obj, int lastId) 
 {
 	ofstream file("product_data.txt", ios::app);
 	if (!file) throw runtime_error("Не удалось открыть файл");
 	file << obj.toText();
 	file.close();
+	setLastId(lastId);
 }
-
 double DataBaseManager::toDouble(const string& inputObject)
 {
 	string sanitized = inputObject;
@@ -39,7 +43,6 @@ double DataBaseManager::toDouble(const string& inputObject)
 	isString >> doubleObject;
 	return doubleObject;
 }
-
 ObjectBD DataBaseManager::parseObject(const vector<string>& lines)
 {
 	ObjectBD obj;
@@ -60,16 +63,19 @@ ObjectBD DataBaseManager::parseObject(const vector<string>& lines)
 	}
 	return obj;
 }	
-
-vector <ObjectBD> DataBaseManager::readObjectBD()
+ifstream DataBaseManager::openFile(const std::string& fileName)
 {
-	ifstream file("product_data.txt");
-	if (!file) cout << ("Не удалось открыть файл") << endl;
-	else if (file) cout << ("Удалось открыть файл") << endl;
+	ifstream file(fileName);
+	if (!file.is_open()) {
+		throw runtime_error("Не удалось открыть файл");
+	}
+	return file;
+}
+vector <ObjectBD> DataBaseManager::parseFile(ifstream& file)
+{
 	vector <ObjectBD> result;
 	vector <string> buffer;
 	string line;
-
 	while (getline(file, line))
 	{
 		if (line == "===")
@@ -77,11 +83,24 @@ vector <ObjectBD> DataBaseManager::readObjectBD()
 			ObjectBD obj = parseObject(buffer);
 			result.push_back(obj);
 			buffer.clear();
-
-			cout << "Объект добавлен!" << endl;
-			/*obj.print();*/
 		}
 		else buffer.push_back(line);
 	}
 	return result;
+}
+
+vector <ObjectBD> DataBaseManager::readObjectBD()
+{
+	try 
+	{
+		ifstream file = openFile("data/product_data.txt");
+		vector <ObjectBD> result = parseFile(file);
+		file.close();
+		return result;
+	}
+	catch (const exception& e) 
+	{
+		cout << e.what() << endl;
+		return {};
+	}
 }
