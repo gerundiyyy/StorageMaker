@@ -19,13 +19,7 @@ private:
 	std::string currentUser;
 public:
 	void callMenu();
-
-	void authorization();
 	void record();
-	void deleteObj();
-	void output();
-	void search();
-
+	void printAll();
 	void run();
-	void stop();
 };

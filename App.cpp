@@ -27,6 +27,15 @@ void App::record()
 	bd.recordObjectBD(obj);
 }
 
+void App::printAll()
+{
+	system("cls");
+	for (ObjectBD obj : storage.getItems())
+	{
+		obj.print();
+	}
+}
+
 void App::callMenu()
 {
 	ui.showMenu();
@@ -35,6 +44,10 @@ void App::callMenu()
 	{
 	case 1:
 		record();
+		break;
+	case 4:
+		printAll();
+		break;
 	}
 }
 
