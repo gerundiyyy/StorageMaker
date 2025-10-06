@@ -24,7 +24,7 @@ int DataBaseManager::toInt(const string& inputObject)
 
 void DataBaseManager::recordObjectBD(const ObjectBD& obj) 
 {
-	ofstream file("product_data.txt", ios::app);
+	ofstream file("data/product_data.txt", ios::app);
 	if (!file) throw runtime_error("Не удалось открыть файл");
 	file << obj.toText();
 	file.close();
@@ -63,7 +63,7 @@ ObjectBD DataBaseManager::parseObject(const vector<string>& lines)
 
 vector <ObjectBD> DataBaseManager::readObjectBD()
 {
-	ifstream file("product_data.txt");
+	ifstream file("data/product_data.txt");
 	if (!file) cout << ("Не удалось открыть файл") << endl;
 	else if (file) cout << ("Удалось открыть файл") << endl;
 	vector <ObjectBD> result;
