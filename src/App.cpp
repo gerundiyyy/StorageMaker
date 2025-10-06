@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <windows.h>;
+#include <windows.h>
 #include <stdlib.h>
 
 #include "App.h"
