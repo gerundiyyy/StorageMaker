@@ -1,11 +1,12 @@
 #pragma once
-
+#ifndef STORAGE_MAKER_APP_H_
+#define STORAGE_MAKER_APP_H_
 #include <string>
 
 #include "ConsolUI.h"
 #include "InputManager.h"
 #include "DataBaseManager.h"
-#include "ObjectBD.h"
+#include "Item.h"
 #include "Storage.h"
 
 class App
@@ -23,3 +24,5 @@ public:
 	void printAll();
 	void run();
 };
+
+#endif

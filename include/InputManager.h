@@ -1,18 +1,20 @@
 #pragma once
+#ifndef STORAGE_MAKER_INPUT_H_
+#define STORAGE_MAKER_INPUT_H_
 #include <string>
-#include "ObjectBD.h"
+#include "Item.h"
 
 using namespace std;
 
 class InputManager
 {
 private:
-	int inputObjectId();
-	string inputObjectName();
-	int inputObjectQuantity();
-	double inputObjectPrice();
-	string inputObjectDate();
-	string inputObjectRegisteredBy();
+	int inputItemId();
+	string inputItemName();
+	int inputItemQuantity();
+	double inputItemPrice();
+	string inputItemDate();
+	string inputItemRegisteredBy();
 public:
 	void intError();
 	void doubleError();
@@ -25,6 +27,6 @@ public:
 	bool isDouble(const string& inputObject);
 
 	int inputMenu();
-	ObjectBD inputFullObject();
+	Item inputFullItem();
 };
-
+#endif

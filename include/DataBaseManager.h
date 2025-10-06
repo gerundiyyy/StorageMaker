@@ -1,8 +1,9 @@
 #pragma once
-
+#ifndef STORAGE_MAKER_DBmanager_H_
+#define STORAGE_MAKER_DBmanager_H_
 #include <string>
 #include <vector>
-#include "ObjectBD.h"
+#include "Item.h"
 
 class DataBaseManager
 {
@@ -14,7 +15,8 @@ private:
 public:
 	int getLastId() const;
 
-	void recordObjectBD(const ObjectBD& obj);
-	std::vector <ObjectBD> readObjectBD();
-	ObjectBD parseObject(const std::vector<std::string>& lines);
+	void recordItem(const Item& item);
+	std::vector <Item> readItem();
+	Item parseItem(const std::vector<std::string>& lines);
 };
+#endif

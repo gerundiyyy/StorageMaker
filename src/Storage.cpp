@@ -1,22 +1,22 @@
-#include <vector>
-
-#include "DataBaseManager.h"
-#include "ObjectBD.h"
 #include "Storage.h"
+
+#include <vector>
+#include "DataBaseManager.h"
+#include "Item.h"
 
 using namespace std;
 
-void Storage::loadFromDB(DataBaseManager& db)
+void Storage::loadItems(DataBaseManager& db)
 {
-    Objects = db.readObjectBD();
+    Items = db.readItem();
 }
 
-void Storage::addItem(const ObjectBD& Object)
+void Storage::addItem(const Item& item)
 {
-    Objects.push_back(Object);
+    Items.push_back(item);
 }
 
-const vector<ObjectBD>& Storage::getItems() const
+const vector<Item>& Storage::getItems() const
 {
-    return Objects;
+    return Items;
 }

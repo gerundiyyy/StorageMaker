@@ -1,13 +1,13 @@
-#include <iostream>
-#include <string>
+#include "App.h"
+
 #include <windows.h>
 #include <stdlib.h>
-
-#include "App.h"
+#include <iostream>
+#include <string>
 #include "ConsolUI.h"
 #include "InputManager.h"
 #include "DataBaseManager.h"
-#include "ObjectBD.h"
+#include "Item.h"
 #include "Storage.h"
 
 void App::run()
@@ -16,23 +16,23 @@ void App::run()
 	SetConsoleCP(1251);
 	setlocale(LC_ALL, "Russian");
 
-	storage.loadFromDB(bd);
+	storage.loadItems(bd);
 }
 
 void App::record()
 {
-	ObjectBD obj = in.inputFullObject();
+	Item item = in.inputFullItem();
 
-	storage.addItem(obj);
-	bd.recordObjectBD(obj);
+	storage.addItem(item);
+	bd.recordItem(item);
 }
 
 void App::printAll()
 {
 	system("cls");
-	for (ObjectBD obj : storage.getItems())
+	for (Item item : storage.getItems())
 	{
-		obj.print();
+		item.print();
 	}
 }
 

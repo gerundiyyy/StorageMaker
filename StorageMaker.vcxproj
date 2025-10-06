@@ -24,7 +24,7 @@
     <ClCompile Include="src\DataBaseManager.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\ObjectBD.cpp" />
+    <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\Storage.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -32,11 +32,14 @@
     <ClInclude Include="include\ConsolUI.h" />
     <ClInclude Include="include\DataBaseManager.h" />
     <ClInclude Include="include\InputManager.h" />
-    <ClInclude Include="include\ObjectBD.h" />
+    <ClInclude Include="include\Item.h" />
     <ClInclude Include="include\Storage.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\product_data.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

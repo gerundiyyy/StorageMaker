@@ -1,7 +1,8 @@
 #pragma once
+#ifndef STORAGE_MAKER_ITEM_H_
+#define STORAGE_MAKER_ITEM_H_
 #include <string>
-
-class ObjectBD
+class Item
 {
 private:
 	int id;
@@ -11,8 +12,8 @@ private:
 	std::string date;
 	std::string registeredBy;
 public:
-	ObjectBD(int id);
-	ObjectBD();
+	Item(int id);
+	Item();
 
 	void setId(int id);
 	void setName(const std::string& name);
@@ -31,3 +32,4 @@ public:
 	std::string toText() const;
 	void print() const;
 };
+#endif

@@ -1,16 +1,17 @@
 #pragma once
-
+#ifndef STORAGE_MAKER_STORAGE_H_
+#define STORAGE_MAKER_STORAGE_H_
 #include <vector>
-
 #include "DataBaseManager.h"
-#include "ObjectBD.h"
+#include "Item.h"
 
 class Storage
 {
 private:
-	std::vector <ObjectBD> Objects;
+	std::vector <Item> Items;
 public:
-    void loadFromDB(DataBaseManager& db);
-    void addItem(const ObjectBD& Object);
-    const std::vector<ObjectBD>& getItems() const;
+    void loadItems(DataBaseManager& db);
+    void addItem(const Item& item);
+    const std::vector<Item>& getItems() const;
 };
+#endif

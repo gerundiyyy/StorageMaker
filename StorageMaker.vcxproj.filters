@@ -18,7 +18,7 @@
     <ClCompile Include="src\Storage.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\ObjectBD.cpp">
+    <ClCompile Include="src\Item.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="include\InputManager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="include\ObjectBD.h">
+    <ClInclude Include="include\Item.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="include\Storage.h">
@@ -61,5 +61,10 @@
     <Text Include="data\product_data.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
 </Project>
