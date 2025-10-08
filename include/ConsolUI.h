@@ -8,6 +8,8 @@ class ConsolUI
 {
 public:
 	void showMenu();
+	void searchItem();
+	void showMessage(const string& message);
 };
 
 #endif

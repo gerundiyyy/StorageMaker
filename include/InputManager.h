@@ -8,14 +8,14 @@ using namespace std;
 
 class InputManager
 {
-private:
+public:
 	int inputItemId();
 	string inputItemName();
 	int inputItemQuantity();
 	double inputItemPrice();
 	string inputItemDate();
 	string inputItemRegisteredBy();
-public:
+
 	void intError();
 	void doubleError();
 	void voidError();

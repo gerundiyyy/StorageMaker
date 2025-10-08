@@ -12,7 +12,7 @@
 class App
 {
 private:
-	DataBaseManager bd;
+	DataBaseManager db;
 	Storage storage;
 	ConsolUI ui;
 	InputManager in;
@@ -23,6 +23,7 @@ public:
 	void record();
 	void printAll();
 	void run();
+	void search();
 };
 
 #endif

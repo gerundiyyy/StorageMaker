@@ -46,36 +46,18 @@ bool InputManager::isInt(const string& inputObject)
 	double isDouble;
 	if (isString >> isDouble && isString.eof())
 	{
-		if (isDouble == static_cast<int>(isDouble))
-		{
-			return true;
-		}
-		else
-		{
-			intError();
-			return false;
-		}
+		if (isDouble == static_cast<int>(isDouble)) return true;
+		else intError(); return false;
 	}
-	else
-	{
-		doubleError();
-		return false;
-	}
+	else doubleError(); return false;
 }
 
 bool InputManager::isDouble(const string& inputObject)
 {
 	stringstream isString(inputObject);
 	double isDouble;
-	if (isString >> isDouble && isString.eof())
-	{
-		return true;
-	}
-	else
-	{
-		doubleError();
-		return false;
-	}
+	if (isString >> isDouble && isString.eof()) return true;
+	else doubleError(); return false;
 }
 
 //Inputs
@@ -166,5 +148,5 @@ int InputManager::inputMenu()
 	string menuChoice;
 	getline(cin, menuChoice);
 	if (isInt(menuChoice)) return toInt(menuChoice);
-	else intError();
+	else intError(); return 0;
 }

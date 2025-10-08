@@ -17,3 +17,13 @@ void ConsolUI::showMenu()
 	cout << "(0) Выйти из программы" << endl;
 	cout << endl;
 }
+void ConsolUI::searchItem()
+{
+	cout << "=============Search=============" << endl;
+	cout << "Введите id товара:";
+}
+
+void ConsolUI::showMessage(const string& message)
+{
+	cout << message << endl;
+}

@@ -9,10 +9,10 @@
 
 using namespace std;
 
-int DataBaseManager::getLastId() const
-{
-	return lastId;
-}
+//int DataBaseManager::getLastId() const
+//{
+//	return lastId;
+//}
 
 //Special 
 
@@ -79,8 +79,6 @@ vector <Item> DataBaseManager::readItem()
 			Item obj = parseItem(buffer);
 			result.push_back(obj);
 			buffer.clear();
-
-			cout << "Объект добавлен!" << endl;
 		}
 		else buffer.push_back(line);
 	}

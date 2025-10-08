@@ -8,8 +8,6 @@
 class DataBaseManager
 {
 private:
-	int lastId;
-
 	int toInt(const std::string& inputObject);
 	double toDouble(const std::string& inputObject);
 public:
