@@ -16,6 +16,7 @@ private:
 	Storage storage;
 	ConsolUI ui;
 	InputManager in;
+	ItemExtractor ex;
 
 	std::string currentUser;
 public:

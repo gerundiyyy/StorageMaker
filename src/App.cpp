@@ -4,11 +4,13 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <limits>
 #include "ConsolUI.h"
 #include "InputManager.h"
 #include "DataBaseManager.h"
 #include "Item.h"
 #include "Storage.h"
+#include "ItemExtractor.h"
 
 void App::run()
 {
@@ -58,13 +60,11 @@ void App::search()
 	system("cls");
 	ui.searchItem();
 	int id = in.inputItemId();
-	const Item* found = storage.searchForId(id);
-
-	if (found) {
-		found->print(); // передаём найденный объект
+	const auto foundList = storage.searchBy(id, ex.byId());
+	if (foundList.empty()) {
+		ui.showMessage("Товар не найден.");
+		return;
 	}
-	else {
-		ui.showMessage("Товар с таким ID не найден.");
-	}
+	for (size_t i = 0; i < foundList.size(); ++i)
+		foundList[i]->print();
 }
-

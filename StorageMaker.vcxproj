@@ -33,6 +33,7 @@
     <ClInclude Include="include\DataBaseManager.h" />
     <ClInclude Include="include\InputManager.h" />
     <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\ItemExtractor.h" />
     <ClInclude Include="include\Storage.h" />
   </ItemGroup>
   <ItemGroup>
