@@ -20,11 +20,13 @@ private:
 
 	std::string currentUser;
 public:
-	void callMenu();
+	void appMenu();
 	void record();
 	void printAll();
 	void run();
-	void search();
+	void stop();
+	void searcher();
+	const auto searcherMenu(int choice);
 };
 
 #endif

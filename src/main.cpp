@@ -4,5 +4,5 @@ int main()
 {
 	App app;
 	app.run();
-	app.callMenu();
+	app.appMenu();
 }
