@@ -12,14 +12,14 @@
 class App
 {
 private:
-	DataBaseManager db;
-	Storage storage;
-	ConsolUI ui;
-	InputManager in;
-	ItemExtractor ex;
-
-	std::string currentUser;
+	DataBaseManager* db;
+	Storage* storage;
+	ConsolUI* ui;
+	InputManager* in;
 public:
+	App(DataBaseManager& db, Storage& storage, ConsolUI& ui,
+		InputManager& in)
+		: db(&db), storage(&storage), ui(&ui), in(&in) {};
 	void appMenu();
 	void record();
 	void printAll();

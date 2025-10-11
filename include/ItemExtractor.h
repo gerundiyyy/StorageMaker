@@ -1,6 +1,6 @@
 #pragma once
-#ifndef STORAGE_MAKER_ITEMEXTRACTOR_H_
-#define STORAGE_MAKER_ITEMEXTRACTOR_H_
+#include <functional>
+#include <string>
 #include "Item.h"
 class ItemExtractor {
 public:
@@ -23,5 +23,3 @@ public:
         return [](const Item& i) { return i.getRegisteredBy(); };
     }
 };
-
-#endif

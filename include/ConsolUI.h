@@ -7,8 +7,9 @@ using namespace std;
 class ConsolUI
 {
 public:
-	void showMenu();
-	void searchItem();
+	void showError(const string& error);
+	void showAppMenu();
+	void showSearcherMenu();
 	void showMessage(const string& message);
 };
 

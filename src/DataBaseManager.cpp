@@ -9,11 +9,6 @@
 
 using namespace std;
 
-//int DataBaseManager::getLastId() const
-//{
-//	return lastId;
-//}
-
 //Special 
 
 int DataBaseManager::toInt(const string& inputObject)

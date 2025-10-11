@@ -1,24 +1,35 @@
 #pragma once
 #ifndef STORAGE_MAKER_STORAGE_H_
 #define STORAGE_MAKER_STORAGE_H_
+
 #include <algorithm>
 #include <vector>
 #include <functional>
-#include <typeinfo>
 #include <string>
 #include <sstream>
 #include <type_traits>
-#include "DataBaseManager.h"
-#include "Item.h"
 #include "ItemExtractor.h"
+#include "Item.h"          
+
+class DataBaseManager;
+class ItemExtractor;
 
 class Storage
 {
 public:
+    Storage(ItemExtractor& ex)
+        : ex(&ex) {}
+
     void loadItems(DataBaseManager& db);
     void addItem(const Item& item);
-    
     const std::vector<Item>& getItems() const;
+
+    std::vector<const Item*> searchById(const int needle) const;
+    std::vector<const Item*> searchByName(const std::string& needle) const;
+    std::vector<const Item*> searchByQuantity(const int needle) const;
+    std::vector<const Item*> searchByPrice(const double needle) const;
+    std::vector<const Item*> searchByDate (const std::string& needle) const;
+    std::vector<const Item*> searchByRegisterdBy(const std::string& needle) const;
 
     template<typename T>
     static std::string to_string_any(const T& value) {
@@ -64,5 +75,6 @@ public:
     void sortBy(Key key, bool ascending);
 private:
 	std::vector <Item> Items;
+    ItemExtractor* ex;
 };
 #endif

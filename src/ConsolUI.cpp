@@ -6,7 +6,7 @@
 #include "DataBaseManager.h"
 
 using namespace std;
-void ConsolUI::showMenu()
+void ConsolUI::showAppMenu()
 {
     cout << " =========================================================== \n";
     cout << " |                      StorageMaker Menu                  | \n";
@@ -18,7 +18,7 @@ void ConsolUI::showMenu()
     cout << " =========================================================== \n";
 }
 
-void ConsolUI::searchItem()
+void ConsolUI::showSearcherMenu()
 {
     cout << " =========================================================== \n";
     cout << " |                   StorageMaker: Поиск                   | \n";
@@ -37,4 +37,9 @@ void ConsolUI::searchItem()
 void ConsolUI::showMessage(const string& message)
 {
 	cout << message << endl;
+}
+
+void ConsolUI::showError(const string& error)
+{
+    cout << "!!!" << error << "!!!" << endl;
 }
