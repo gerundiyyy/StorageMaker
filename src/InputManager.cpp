@@ -10,17 +10,21 @@
 using namespace std;
 
 //Errors
+void InputManager::boolError()
+{
+	ui->showMessage("Ошибка! Пожалуйста, введите 1 или 0: ");
+}
 void InputManager::intError()
 {
-	cout << "Ошибка! Пожалуйста, введите целое число: ";
+	ui->showMessage("Ошибка! Пожалуйста, введите целое число : ");
 }
 void InputManager::doubleError()
 {
-	cout << "Ошибка! Пожалуйста, введите число: ";
+	ui->showMessage("Ошибка! Пожалуйста, введите число: ");
 }
 void InputManager::voidError()
 {
-	cout << "Ошибка! Пожалуйста, введите значение: ";
+	ui->showMessage("Ошибка! Пожалуйста, введите значение: ");
 }
 
 //Checks and converters
@@ -52,6 +56,13 @@ bool InputManager::isInt(const string& inputObject)
 	else doubleError(); return false;
 }
 
+//bool InputManager::isBool(const string& inputObject)
+//{
+//	
+//	if (inputObject != 1 || inputObject)
+//	else return 
+//}
+
 bool InputManager::isDouble(const string& inputObject)
 {
 	stringstream isString(inputObject);
@@ -61,6 +72,16 @@ bool InputManager::isDouble(const string& inputObject)
 }
 
 //Inputs
+
+bool InputManager::isContinue() const
+{
+	ui->showMessage("Продолжить действие? (1 - да, 0 - нет)");
+	bool isContinue;
+	cin >> isContinue;
+	std::cin.clear();
+	std::cin.ignore(32767, '\n');
+	return isContinue;
+}
 
 int InputManager::inputItemId()
 {

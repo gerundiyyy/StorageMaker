@@ -38,50 +38,58 @@ void App::printAll()
 }
 void App::appMenu()
 {
-	system("cls");
-	ui->showAppMenu();
-	ui->showMessage("Введите пункт меню: ");
-	int choice = in->inputMenu();
+	bool isContinue;
+	do {
+		system("cls");
+		ui->showAppMenu();
+		ui->showMessage("Введите пункт меню: ");
+		int choice = in->inputMenu();
+		static const std::unordered_map <int, void(App::*)()> menuActions
+		{
+			{1, &App::printAll},
+			{2, &App::searcher},
+			{3, &App::record},
+			{0, &App::stop},
+		};
+		auto it = menuActions.find(choice);
+		if (it != menuActions.end()) {
+			(this->*(it->second))();
+		}
+		isContinue = in->isContinue();
+	} while (&isContinue);	
+}
 
-	static const std::unordered_map <int, void(App::*)()> menuActions
+const auto App::searcherMenu(int choice)
+{
+	switch(choice)
 	{
-		{1, &App::printAll},
-		{2, &App::searcher},
-		{3, &App::record},
-		{0, &App::stop},
-	};
-	auto it = menuActions.find(choice);
-	if (it != menuActions.end()) {
-		(this->*(it->second))();
+		case 1: return storage->searchById();
+		case 2: return storage->searchByName();
+		case 3: return storage->searchByQuantity();
+		case 4: return storage->searchByPrice();
+		case 5: return storage->searchByDate();
+		case 6: return storage->searchByRegisterdBy();
+		case 0: appMenu();
 	}
 }
+
 void App::searcher()
 {
-	system("cls");
-	ui->showSearcherMenu();
-	int choice = in->inputMenu();
-	const auto foundList = searcherMenu(choice);
+	bool isContinue;
+	do{
+		system("cls");
+		ui->showSearcherMenu();
+		int choice = in->inputMenu();
+		const auto foundList = searcherMenu(choice);
 
-	static const std::unordered_map <int, std::vector<const Item*>(Storage::*)()> menuActions
-	{
-		{1, &Storage::searchById},
-		{2, &Storage::searchByName},
-		{3, &Storage::searchByQuantity},
-		{4, &Storage::searchByPrice},
-		{5, &Storage::searchByDate},
-		{6, &Storage::searchByRegisterdBy},
-	};
-	auto it = menuActions.find(choice);
-	if (it != menuActions.end()) {
-		(this->*(it->second))();
-	}
-
-	if (foundList.empty()) {
-		ui->showMessage("Товар не найден.");
-		return;
-	}
-	for (size_t i = 0; i < foundList.size(); ++i)
-		foundList[i]->print();
+		if (foundList.empty()) {
+			ui->showMessage("Товар не найден.");
+			return;
+		}
+		for (size_t i = 0; i < foundList.size(); ++i)
+			foundList[i]->print();
+		isContinue = in->isContinue();
+	} while (&isContinue);
 }
 
 void App::stop() {

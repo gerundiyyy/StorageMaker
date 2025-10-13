@@ -9,7 +9,9 @@
 #include <sstream>
 #include <type_traits>
 #include "ItemExtractor.h"
-#include "Item.h"          
+#include "Item.h"
+#include "InputManager.h"   
+#include "ConsolUI.h" 
 
 class DataBaseManager;
 class ItemExtractor;
@@ -17,19 +19,19 @@ class ItemExtractor;
 class Storage
 {
 public:
-    Storage(ItemExtractor& ex)
-        : ex(&ex) {}
+    Storage(ItemExtractor& ex, InputManager& in, ConsolUI& ui)
+        : ex(&ex), in(&in), ui(&ui) {}
 
     void loadItems(DataBaseManager& db);
     void addItem(const Item& item);
     const std::vector<Item>& getItems() const;
 
-    std::vector<const Item*> searchById(const int needle) const;
-    std::vector<const Item*> searchByName(const std::string& needle) const;
-    std::vector<const Item*> searchByQuantity(const int needle) const;
-    std::vector<const Item*> searchByPrice(const double needle) const;
-    std::vector<const Item*> searchByDate (const std::string& needle) const;
-    std::vector<const Item*> searchByRegisterdBy(const std::string& needle) const;
+    std::vector<const Item*> searchById() const;
+    std::vector<const Item*> searchByName() const;
+    std::vector<const Item*> searchByQuantity() const;
+    std::vector<const Item*> searchByPrice() const;
+    std::vector<const Item*> searchByDate () const;
+    std::vector<const Item*> searchByRegisterdBy() const;
 
     template<typename T>
     static std::string to_string_any(const T& value) {
@@ -76,5 +78,7 @@ public:
 private:
 	std::vector <Item> Items;
     ItemExtractor* ex;
+    InputManager* in;
+    ConsolUI* ui;
 };
 #endif

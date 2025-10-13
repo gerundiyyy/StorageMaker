@@ -36,27 +36,33 @@ const vector<Item>& Storage::getItems() const
 {
     return Items;
 }
-std::vector<const Item*> Storage::searchById(const int needle) const
+std::vector<const Item*> Storage::searchById() const
 {
+    const int needle = in->inputItemId();
     return searchBy(needle, ex->byId());
 }
-std::vector<const Item*> Storage::searchByName(const string& needle) const
+std::vector<const Item*> Storage::searchByName() const
 {
+    const string& needle = in->inputItemName();
     return searchBy(needle, ex->byName());
 }
-std::vector<const Item*> Storage::searchByQuantity(const int needle) const
+std::vector<const Item*> Storage::searchByQuantity() const
 {
+    const int needle = in->inputItemQuantity();
     return searchBy(needle, ex->byQuantity());
 }
-std::vector<const Item*> Storage::searchByPrice(const double needle) const
+std::vector<const Item*> Storage::searchByPrice() const
 {
+    const double needle = in->inputItemPrice();
     return searchBy(needle, ex->byPrice());
 }
-std::vector<const Item*> Storage::searchByDate(const string& needle) const
+std::vector<const Item*> Storage::searchByDate() const
 {
+    const string& needle = in->inputItemDate();
     return searchBy(needle, ex->byDate());
 }
-std::vector<const Item*> Storage::searchByRegisterdBy(const string& needle) const
+std::vector<const Item*> Storage::searchByRegisterdBy() const
 {
+    const string& needle = in->inputItemRegisteredBy();
     return searchBy(needle, ex->byRegisteredBy());
 }
