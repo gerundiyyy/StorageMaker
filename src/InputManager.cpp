@@ -159,7 +159,6 @@ Item InputManager::inputFullItem()
 	inputItem.setDate(inputItemDate());
 	cout << "Кто зарегестрировал: ";
 	inputItem.setRegisteredBy(inputItemRegisteredBy());
-	cout << endl;
 
 	return inputItem;
 }

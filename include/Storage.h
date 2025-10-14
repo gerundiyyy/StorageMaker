@@ -25,9 +25,10 @@ public:
     void loadItems(DataBaseManager& db);
     void addItem(const Item& item);
     void deleteItem();
+    void changeItem(const Item& item);
 
     const std::vector<Item>& getItems() const;
-    int deleteSearch() const;
+    int singleSearchById() const;
     std::vector<const Item*> searchById() const;
     std::vector<const Item*> searchByName() const;
     std::vector<const Item*> searchByQuantity() const;

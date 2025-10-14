@@ -24,6 +24,7 @@ public:
 	void record();
 	void deleteItem();
 	void printAll();
+	void changeItem();
 	void run();
 	void stop();
 	void searcher();
