@@ -14,6 +14,7 @@ public:
 	int getLastId() const;
 
 	void recordItem(const Item& item);
+	void recordItem(const std::vector<Item>& items) const;
 	std::vector <Item> readItem();
 	Item parseItem(const std::vector<std::string>& lines);
 };

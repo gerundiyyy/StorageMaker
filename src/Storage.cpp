@@ -17,6 +17,20 @@ void Storage::addItem(const Item& item)
     Items.push_back(item);
     sortBy([](const Item& it) { return it.getId(); }, true);
 }
+void Storage::deleteItem()
+{
+    sortBy([](const Item& it) { return it.getId(); }, true);
+    int idx = deleteSearch();
+    if (idx < 0) {
+        ui->showMessage("Товар не найден.");
+        return;
+    }
+    if (static_cast<size_t>(idx) >= Items.size()) {
+        ui->showMessage("Некорректный индекс для удаления.");
+        return;
+    }
+    Items.erase(Items.begin() + idx);
+}
 
 template<typename Key>
 void Storage::sortBy(Key key, bool ascending) {
@@ -35,6 +49,14 @@ void Storage::sortBy(Key key, bool ascending) {
 const vector<Item>& Storage::getItems() const
 {
     return Items;
+}
+int Storage::deleteSearch() const
+{
+    const int needle = in->inputItemId();
+    for (int i = 0; i < Items.size(); i++) {
+        if (Items[i].getId() == needle) return i;
+    }
+    return -1;
 }
 std::vector<const Item*> Storage::searchById() const
 {

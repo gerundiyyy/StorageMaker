@@ -28,6 +28,12 @@ void App::record()
 	storage->addItem(item);
 	db->recordItem(item);
 }
+void App::deleteItem()
+{
+	system("cls");
+	storage->deleteItem();
+	db->recordItem(storage->getItems());
+}
 void App::printAll()
 {
 	system("cls");
@@ -49,6 +55,7 @@ void App::appMenu()
 			{1, &App::printAll},
 			{2, &App::searcher},
 			{3, &App::record},
+			{4, &App::deleteItem},
 			{0, &App::stop},
 		};
 		auto it = menuActions.find(choice);

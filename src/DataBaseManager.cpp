@@ -18,7 +18,6 @@ int DataBaseManager::toInt(const string& inputObject)
 	isString >> intObject;
 	return intObject;
 }
-
 void DataBaseManager::recordItem(const Item& item)
 {
 	ofstream file("data/product_data.txt", ios::app);
@@ -26,7 +25,22 @@ void DataBaseManager::recordItem(const Item& item)
 	file << item.toText();
 	file.close();
 }
-
+void DataBaseManager::recordItem(const std::vector<Item>& items) const
+{
+	try {
+		ofstream file("data/product_data.txt", ofstream::out | ofstream::trunc);
+		if (!file) throw runtime_error("Не удалось открыть файл");
+		for (const auto& item : items)
+		{
+			file << item.toText();
+		}
+		file.close();
+	}
+	catch (const runtime_error& e)
+	{
+		cerr << "Ошибка записи";
+	}
+}
 double DataBaseManager::toDouble(const string& inputObject)
 {
 	string sanitized = inputObject;

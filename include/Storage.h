@@ -24,8 +24,10 @@ public:
 
     void loadItems(DataBaseManager& db);
     void addItem(const Item& item);
-    const std::vector<Item>& getItems() const;
+    void deleteItem();
 
+    const std::vector<Item>& getItems() const;
+    int deleteSearch() const;
     std::vector<const Item*> searchById() const;
     std::vector<const Item*> searchByName() const;
     std::vector<const Item*> searchByQuantity() const;
@@ -69,10 +71,8 @@ public:
                 results.push_back(&item);
             }
         }
-
         return results;
     }
-
     template<typename Key>
     void sortBy(Key key, bool ascending);
 private:

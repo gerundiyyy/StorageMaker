@@ -22,6 +22,7 @@ public:
 		: db(&db), storage(&storage), ui(&ui), in(&in) {};
 	void appMenu();
 	void record();
+	void deleteItem();
 	void printAll();
 	void run();
 	void stop();
