@@ -20,16 +20,23 @@ void Storage::addItem(const Item& item)
 void Storage::deleteItem()
 {
     sortBy([](const Item& it) { return it.getId(); }, true);
-    int idx = deleteSearch();
-    if (idx < 0) {
-        ui->showMessage("Товар не найден.");
-        return;
-    }
-    if (static_cast<size_t>(idx) >= Items.size()) {
-        ui->showMessage("Некорректный индекс для удаления.");
-        return;
-    }
+    int idx = singleSearchById();
+    if (idx < 0) 
+        throw runtime_error("Товар не найден.");
+    if (static_cast<size_t>(idx) >= Items.size())
+        throw out_of_range("Некорректный индекс удаления.");
     Items.erase(Items.begin() + idx);
+}
+void Storage::changeItem(const Item& item)
+{
+    sortBy([](const Item& it) { return it.getId(); }, true);
+    int idx = singleSearchById();
+    if (idx < 0)
+        throw runtime_error("Товар не найден.");
+    if (static_cast<size_t>(idx) >= Items.size())
+        throw out_of_range("Некорректный индекс изменения.");
+    Items.erase(Items.begin() + idx);
+    addItem(item);
 }
 
 template<typename Key>
@@ -50,7 +57,7 @@ const vector<Item>& Storage::getItems() const
 {
     return Items;
 }
-int Storage::deleteSearch() const
+int Storage::singleSearchById() const
 {
     const int needle = in->inputItemId();
     for (int i = 0; i < Items.size(); i++) {

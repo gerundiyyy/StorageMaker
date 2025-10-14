@@ -44,13 +44,13 @@ void App::record()
 void App::deleteItem()
 {
 	system("cls");
-	storage->deleteItem();
 	try {
+		storage->deleteItem();
 		db->recordItem(storage->getItems());
+		ui->showMessage("Товар успешно удалён.");
 	}
-	catch (const runtime_error& e)
-	{
-		cerr << "Ошибка записи";
+	catch (const std::exception& e) {
+		ui->showMessage(string{ "Ошибка: " } + e.what());
 	}
 }
 void App::printAll()
@@ -59,6 +59,20 @@ void App::printAll()
 	for (Item item : storage->getItems())
 	{
 		item.print();
+	}
+}
+void App::changeItem()
+{
+	system("cls");
+	Item item = in->inputFullItem();
+	ui->showMessage("Введите id товара, который хотите переписать:");
+	try {
+		storage->changeItem(item);
+		db->recordItem(storage->getItems());
+		ui->showMessage("Товар успешно изменён.");
+	}
+	catch (const std::exception& e) {
+		ui->showMessage(string{ "Ошибка: " } + e.what());
 	}
 }
 void App::appMenu()
@@ -75,6 +89,7 @@ void App::appMenu()
 			{2, &App::searcher},
 			{3, &App::record},
 			{4, &App::deleteItem},
+			{5, &App::changeItem},
 			{0, &App::stop},
 		};
 		auto it = menuActions.find(choice);
