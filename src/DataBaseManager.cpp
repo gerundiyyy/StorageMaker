@@ -51,23 +51,31 @@ double DataBaseManager::toDouble(const string& inputObject)
 	return doubleObject;
 }
 
+void DataBaseManager::parseLine(Item& item, const string& line)
+{
+	if (line.find("id: ") == 0)
+		item.setId(toInt(line.substr(4)));
+	else if (line.find("Имя: ") == 0)
+		item.setName(line.substr(5));
+	else if (line.find("Количество: ") == 0)
+		item.setQuantity(toInt(line.substr(12)));
+	else if (line.find("Цена: ") == 0)
+		item.setPrice(toDouble(line.substr(6)));
+	else if (line.find("Дата регистрации: ") == 0)
+		item.setDate(line.substr(18));
+	else if (line.find("Кто зарегистрировал: ") == 0)
+		item.setRegisteredBy(line.substr(21));
+}
+
 Item DataBaseManager::parseItem(const vector<string>& lines)
 {
 	Item item;
-	for (const auto& line : lines)
+	try {
+		for (const auto& line : lines) parseLine(item, line);
+	}
+	catch (const exception& e)
 	{
-		if (line.find("id: ") == 0)
-			item.setId(toInt(line.substr(4)));
-		else if (line.find("Имя: ") == 0)
-			item.setName(line.substr(5));
-		else if (line.find("Количество: ") == 0)
-			item.setQuantity(toInt(line.substr(12)));
-		else if (line.find("Цена: ") == 0)
-			item.setPrice(toDouble(line.substr(6)));
-		else if (line.find("Дата регистрации: ") == 0)
-			item.setDate(line.substr(18));
-		else if (line.find("Кто зарегистрировал: ") == 0)
-			item.setRegisteredBy(line.substr(21));
+		throw runtime_error(string{ "Ошибка парсинга Item: " } + e.what());
 	}
 	return item;
 }	
@@ -75,8 +83,7 @@ Item DataBaseManager::parseItem(const vector<string>& lines)
 vector <Item> DataBaseManager::readItem()
 {
 	ifstream file("data/product_data.txt");
-	if (!file) cout << ("Не удалось открыть файл") << endl;
-	else if (file) cout << ("Удалось открыть файл") << endl;
+	if (!file) throw runtime_error("Не удалось открыть файл");
 	vector <Item> result;
 	vector <string> buffer;
 	string line;
@@ -92,4 +99,8 @@ vector <Item> DataBaseManager::readItem()
 		else buffer.push_back(line);
 	}
 	return result;
+}
+void DataBaseManager::createFile(const string& adress)
+{
+	ofstream ensure(adress, ios::app);
 }

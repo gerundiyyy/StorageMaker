@@ -18,21 +18,40 @@ void App::run()
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 	setlocale(LC_ALL, "Russian");
+	db->createFile("data/product_data.txt");
 
-	storage->loadItems(*db);
+	try {
+		storage->loadItems(*db);
+	}
+	catch (const runtime_error& e)
+	{
+		cerr << "Ошибка чтения";
+	}
 }
 void App::record()
 {
 	system("cls");
 	Item item = in->inputFullItem();
 	storage->addItem(item);
-	db->recordItem(item);
+	try {
+		db->recordItem(item);
+	}
+	catch (const runtime_error& e)
+	{
+		cerr << "Ошибка записи";
+	}
 }
 void App::deleteItem()
 {
 	system("cls");
 	storage->deleteItem();
-	db->recordItem(storage->getItems());
+	try {
+		db->recordItem(storage->getItems());
+	}
+	catch (const runtime_error& e)
+	{
+		cerr << "Ошибка записи";
+	}
 }
 void App::printAll()
 {
