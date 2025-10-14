@@ -1,68 +1,46 @@
+ï»¿#include "ConsolUI.h"
+
 #include <iostream>
 #include <string>
-#include "ConsolUI.h"
 #include "InputManager.h"
 #include "DataBaseManager.h"
 
 using namespace std;
-void ConsolUI::showMenu()
+void ConsolUI::showAppMenu()
 {
-	cout << "Ìåíþ:" << endl;
-	cout << "(1) Çàïèñàòü îáúåêò â ÁÄ" << endl;
-	cout << "(2) Èçìåíèòü îáúåêò â ÁÄ" << endl;
-	cout << "(3) Óäàëèòü îáúåêò èç ÁÄ" << endl;
-	cout << "(4) Âûâåñòè âñå îáúåêòû ÁÄ" << endl;
-	cout << "(5) Ïîèñê è ñîðòèðîâêà" << endl;
-	cout << "(0) Âûéòè èç ïðîãðàììû" << endl;
-	cout << endl;
+    cout << " =========================================================== \n";
+    cout << " |                      StorageMaker Menu                  | \n";
+    cout << " =========================================================== \n";
+    cout << " | 1 - Ð’Ñ‹Ð²Ð¾Ð´ Ð²ÑÐµÑ… Ð´Ð°Ð½Ð½Ñ‹Ñ…                                   | \n";
+    cout << " | 2 - ÐŸÐ¾Ð¸ÑÐº                                               | \n";
+    cout << " | 3 - Ð—Ð°Ð¿Ð¸ÑÑŒ                                              | \n";
+    cout << " | 4 - Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ Ñ‚Ð¾Ð²Ð°Ñ€                                       | \n";
+    cout << " | 0 - Ð’Ñ‹Ñ…Ð¾Ð´ Ð¸Ð· Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹                                  | \n";
+    cout << " =========================================================== \n";
 }
 
-//void ConsolUI::showMenu() 
-//{
-//	InputManager Cinput;
-//	coutMenu();
-//	cout << "Âûáåðèòå äåéñòâèå: ";
-//	while (true)
-//	{
-//		string number;
-//		cin >> number;
-//		if (Cinput.isInt(number))
-//		{
-//			switch (Cinput.toInt(number))
-//			{
-//			case 1:
-//				system("cls");
-//				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-//				cout << "Ââåä¸ì îáúåêò äëÿ çàïèñè" << endl;
-//				Cinput.inputFullObject();
-//				system("pause");
-//				break;
-//			case 2:
-//			{
-//				DataBaseManager* bd = new DataBaseManager();
-//				bd->readObjectBD();
-//
-//				delete bd;
-//				break;
-//			}
-//				
-//			case 3:
-//				cout << "Âûïîëíÿþ çàäàíèå!" << endl;
-//				break;
-//			case 4:
-//				cout << "Âûïîëíÿþ çàäàíèå!" << endl;
-//				break;
-//			case 5:
-//				cout << "Âûïîëíÿþ çàäàíèå!" << endl;
-//				break;
-//			case 0: 
-//				cout << "Âûïîëíÿþ çàäàíèå!" << endl;
-//				break;
-//			default:
-//				cout << "Íåâåðíûé âûáîð! Ââåäèòå íîìåð: ";
-//				break;
-//			}
-//		}
-//		if (Cinput.toInt(number) == 0) break;
-//	}
-//}
+void ConsolUI::showSearcherMenu()
+{
+    cout << " =========================================================== \n";
+    cout << " |                   StorageMaker: ÐŸÐ¾Ð¸ÑÐº                   | \n";
+    cout << " =========================================================== \n";
+    cout << " | 1 - ÐŸÐ¾ ID                                               | \n";
+    cout << " | 2 - ÐŸÐ¾ Ð¸Ð¼ÐµÐ½Ð¸                                            | \n";
+    cout << " | 3 - ÐŸÐ¾ ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ñƒ                                       | \n";
+    cout << " | 4 - ÐŸÐ¾ Ñ†ÐµÐ½Ðµ                                             | \n";
+    cout << " | 5 - ÐŸÐ¾ Ð´Ð°Ñ‚Ðµ                                             | \n";
+    cout << " | 6 - ÐŸÐ¾ Ð·Ð°Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¸Ñ€Ð¾Ð²Ð°Ð²ÑˆÐµÐ¼Ñƒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŽ                 | \n";
+    cout << " | 0 - Ð’ÐµÑ€Ð½ÑƒÑ‚ÑŒÑÑ Ð² Ð¼ÐµÐ½ÑŽ                                    | \n";
+    cout << " =========================================================== \n";
+}
+
+
+void ConsolUI::showMessage(const string& message)
+{
+	cout << message << endl;
+}
+
+void ConsolUI::showError(const string& error)
+{
+    cout << "!!!" << error << "!!!" << endl;
+}

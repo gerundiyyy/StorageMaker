@@ -1,13 +1,16 @@
-#include <iostream>
-#include <string>
+#include "App.h"
+
 #include <windows.h>
 #include <stdlib.h>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-#include "App.h"
 #include "ConsolUI.h"
 #include "InputManager.h"
 #include "DataBaseManager.h"
-#include "ObjectBD.h"
+#include "Item.h"
 #include "Storage.h"
 
 void App::run()
@@ -15,39 +18,107 @@ void App::run()
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 	setlocale(LC_ALL, "Russian");
+	db->createFile("data/product_data.txt");
 
-	storage.loadFromDB(bd);
+	try {
+		storage->loadItems(*db);
+	}
+	catch (const runtime_error& e)
+	{
+		cerr << "Ошибка чтения";
+	}
 }
-
 void App::record()
 {
-	ObjectBD obj = in.inputFullObject();
-
-	storage.addItem(obj);
-	bd.recordObjectBD(obj);
+	system("cls");
+	Item item = in->inputFullItem();
+	storage->addItem(item);
+	try {
+		db->recordItem(item);
+	}
+	catch (const runtime_error& e)
+	{
+		cerr << "Ошибка записи";
+	}
 }
-
+void App::deleteItem()
+{
+	system("cls");
+	storage->deleteItem();
+	try {
+		db->recordItem(storage->getItems());
+	}
+	catch (const runtime_error& e)
+	{
+		cerr << "Ошибка записи";
+	}
+}
 void App::printAll()
 {
 	system("cls");
-	for (ObjectBD obj : storage.getItems())
+	for (Item item : storage->getItems())
 	{
-		obj.print();
+		item.print();
 	}
 }
-
-void App::callMenu()
+void App::appMenu()
 {
-	ui.showMenu();
-	cout << "Введите пункт меню: ";
-	switch (in.inputMenu())
+	bool isContinue;
+	do {
+		system("cls");
+		ui->showAppMenu();
+		ui->showMessage("Введите пункт меню: ");
+		int choice = in->inputMenu();
+		static const std::unordered_map <int, void(App::*)()> menuActions
+		{
+			{1, &App::printAll},
+			{2, &App::searcher},
+			{3, &App::record},
+			{4, &App::deleteItem},
+			{0, &App::stop},
+		};
+		auto it = menuActions.find(choice);
+		if (it != menuActions.end()) {
+			(this->*(it->second))();
+		}
+		isContinue = in->isContinue();
+	} while (&isContinue);	
+}
+
+const auto App::searcherMenu(int choice)
+{
+	switch(choice)
 	{
-	case 1:
-		record();
-		break;
-	case 4:
-		printAll();
-		break;
+		case 1: return storage->searchById();
+		case 2: return storage->searchByName();
+		case 3: return storage->searchByQuantity();
+		case 4: return storage->searchByPrice();
+		case 5: return storage->searchByDate();
+		case 6: return storage->searchByRegisterdBy();
+		case 0: appMenu();
 	}
 }
 
+void App::searcher()
+{
+	bool isContinue;
+	do{
+		system("cls");
+		ui->showSearcherMenu();
+		int choice = in->inputMenu();
+		const auto foundList = searcherMenu(choice);
+
+		if (foundList.empty()) {
+			ui->showMessage("Товар не найден.");
+			return;
+		}
+		for (size_t i = 0; i < foundList.size(); ++i)
+			foundList[i]->print();
+		isContinue = in->isContinue();
+	} while (&isContinue);
+}
+
+void App::stop() {
+	ui->showMessage("Завершение работы программы...");
+	std::exit(0);
+}

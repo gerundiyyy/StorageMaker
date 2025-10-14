@@ -1,25 +1,33 @@
 #pragma once
-
+#ifndef STORAGE_MAKER_APP_H_
+#define STORAGE_MAKER_APP_H_
 #include <string>
 
 #include "ConsolUI.h"
 #include "InputManager.h"
 #include "DataBaseManager.h"
-#include "ObjectBD.h"
+#include "Item.h"
 #include "Storage.h"
 
 class App
 {
 private:
-	DataBaseManager bd;
-	Storage storage;
-	ConsolUI ui;
-	InputManager in;
-
-	std::string currentUser;
+	DataBaseManager* db;
+	Storage* storage;
+	ConsolUI* ui;
+	InputManager* in;
 public:
-	void callMenu();
+	App(DataBaseManager& db, Storage& storage, ConsolUI& ui,
+		InputManager& in)
+		: db(&db), storage(&storage), ui(&ui), in(&in) {};
+	void appMenu();
 	void record();
+	void deleteItem();
 	void printAll();
 	void run();
+	void stop();
+	void searcher();
+	const auto searcherMenu(int choice);
 };
+
+#endif

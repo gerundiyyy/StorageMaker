@@ -1,26 +1,30 @@
+#include "InputManager.h"
+
+#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <regex>
-#include <stdlib.h>
 #include "DataBaseManager.h"
-#include "ObjectBD.h"
-#include "InputManager.h"
-
+#include "Item.h"
 using namespace std;
 
 //Errors
+void InputManager::boolError()
+{
+	ui->showMessage("Ошибка! Пожалуйста, введите 1 или 0: ");
+}
 void InputManager::intError()
 {
-	cout << "Ошибка! Пожалуйста, введите целое число: ";
+	ui->showMessage("Ошибка! Пожалуйста, введите целое число : ");
 }
 void InputManager::doubleError()
 {
-	cout << "Ошибка! Пожалуйста, введите число: ";
+	ui->showMessage("Ошибка! Пожалуйста, введите число: ");
 }
 void InputManager::voidError()
 {
-	cout << "Ошибка! Пожалуйста, введите значение: ";
+	ui->showMessage("Ошибка! Пожалуйста, введите значение: ");
 }
 
 //Checks and converters
@@ -46,41 +50,40 @@ bool InputManager::isInt(const string& inputObject)
 	double isDouble;
 	if (isString >> isDouble && isString.eof())
 	{
-		if (isDouble == static_cast<int>(isDouble))
-		{
-			return true;
-		}
-		else
-		{
-			intError();
-			return false;
-		}
+		if (isDouble == static_cast<int>(isDouble)) return true;
+		else intError(); return false;
 	}
-	else
-	{
-		doubleError();
-		return false;
-	}
+	else doubleError(); return false;
 }
+
+//bool InputManager::isBool(const string& inputObject)
+//{
+//	
+//	if (inputObject != 1 || inputObject)
+//	else return 
+//}
 
 bool InputManager::isDouble(const string& inputObject)
 {
 	stringstream isString(inputObject);
 	double isDouble;
-	if (isString >> isDouble && isString.eof())
-	{
-		return true;
-	}
-	else
-	{
-		doubleError();
-		return false;
-	}
+	if (isString >> isDouble && isString.eof()) return true;
+	else doubleError(); return false;
 }
 
 //Inputs
 
-int InputManager::inputObjectId()
+bool InputManager::isContinue() const
+{
+	ui->showMessage("Продолжить действие? (1 - да, 0 - нет)");
+	bool isContinue;
+	cin >> isContinue;
+	std::cin.clear();
+	std::cin.ignore(32767, '\n');
+	return isContinue;
+}
+
+int InputManager::inputItemId()
 {
 	string objectId;
 	while (true)
@@ -91,7 +94,7 @@ int InputManager::inputObjectId()
 	return toInt(objectId);
 }
 
-string InputManager::inputObjectName()
+string InputManager::inputItemName()
 {
 	string objectName;
 	while (true)
@@ -104,7 +107,7 @@ string InputManager::inputObjectName()
 	return objectName;
 }
 
-int InputManager::inputObjectQuantity()
+int InputManager::inputItemQuantity()
 {
 	string objectQuantity;
 	while (true)
@@ -115,7 +118,7 @@ int InputManager::inputObjectQuantity()
 	return toInt(objectQuantity);
 }
 
-double InputManager::inputObjectPrice()
+double InputManager::inputItemPrice()
 {
 	string objectPrice;
 	while (true)
@@ -126,39 +129,39 @@ double InputManager::inputObjectPrice()
 	return toDouble(objectPrice);
 }
 
-string InputManager::inputObjectDate()
+string InputManager::inputItemDate()
 {
 	string objectDate;
 	getline(cin, objectDate);
 	return objectDate;
 }
 
-string InputManager::inputObjectRegisteredBy()
+string InputManager::inputItemRegisteredBy()
 {
 	string objectRegisteredBy;
 	getline(cin, objectRegisteredBy);
 	return objectRegisteredBy;
 }
 
-ObjectBD InputManager::inputFullObject()
+Item InputManager::inputFullItem()
 {
-	ObjectBD inputObjectBD;
+	Item inputItem;
 
 	cout << "id: ";
-	inputObjectBD.setId(inputObjectId());
+	inputItem.setId(inputItemId());
 	cout << "Имя: ";
-	inputObjectBD.setName(inputObjectName());
+	inputItem.setName(inputItemName());
 	cout << "Количество: ";
-	inputObjectBD.setQuantity(inputObjectQuantity());
+	inputItem.setQuantity(inputItemQuantity());
 	cout << "Цена: ";
-	inputObjectBD.setPrice(inputObjectPrice());
+	inputItem.setPrice(inputItemPrice());
 	cout << "Дата регистрации: ";
-	inputObjectBD.setDate(inputObjectDate());
+	inputItem.setDate(inputItemDate());
 	cout << "Кто зарегестрировал: ";
-	inputObjectBD.setRegisteredBy(inputObjectRegisteredBy());
+	inputItem.setRegisteredBy(inputItemRegisteredBy());
 	cout << endl;
 
-	return inputObjectBD;
+	return inputItem;
 }
 
 int InputManager::inputMenu()
@@ -166,5 +169,5 @@ int InputManager::inputMenu()
 	string menuChoice;
 	getline(cin, menuChoice);
 	if (isInt(menuChoice)) return toInt(menuChoice);
-	else intError();
+	else intError(); return 0;
 }
