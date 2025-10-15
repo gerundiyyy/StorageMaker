@@ -75,14 +75,3 @@ string Item::toText() const
 		"Кто зарегистрировал: " + registeredBy + "\n"
 		"===\n";
 }
-
-void Item::print() const
-{
-	cout << "id: " << id << "\n"
-		<< "Имя: " << name << "\n"
-		<< "Количество: " << quantity << "\n"
-		<< "Цена: " << price << "\n"
-		<< "Дата регистрации: " << date << "\n"
-		<< "Кто зарегистрировал: " << registeredBy << "\n"
-		<< "===\n";
-}

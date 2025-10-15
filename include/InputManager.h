@@ -4,7 +4,6 @@
 #include <string>
 #include "Item.h"
 #include "ConsolUI.h"
-
 using namespace std;
 
 class InputManager
@@ -34,6 +33,7 @@ public:
 	bool isContinue() const;
 	/*bool inputBool();*/
 
+	int waitForKey();
 	int inputMenu();
 	Item inputFullItem();
 private:
