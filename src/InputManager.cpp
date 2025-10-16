@@ -56,13 +56,6 @@ bool InputManager::isInt(const string& inputObject)
 	else doubleError(); return false;
 }
 
-//bool InputManager::isBool(const string& inputObject)
-//{
-//	
-//	if (inputObject != 1 || inputObject)
-//	else return 
-//}
-
 bool InputManager::isDouble(const string& inputObject)
 {
 	stringstream isString(inputObject);
@@ -162,11 +155,22 @@ Item InputManager::inputFullItem()
 
 	return inputItem;
 }
-
+int InputManager::waitForKey()
+{
+	string s;
+	getline(cin, s); // просто ждЄм Enter или любой ввод
+	if (s.empty()) return 1;   // пустой ввод Ч считать "продолжить"
+	if (isInt(s)) return toInt(s); // если ввели число Ч вернуть его (0 = назад)
+	return 1;
+}
 int InputManager::inputMenu()
 {
 	string menuChoice;
-	getline(cin, menuChoice);
-	if (isInt(menuChoice)) return toInt(menuChoice);
-	else intError(); return 0;
+	while (true)
+	{
+		getline(cin, menuChoice);
+		if (isInt(menuChoice)) return toInt(menuChoice);
+		intError();
+		ui->showMessage("ѕовторите ввод: ");
+	}
 }

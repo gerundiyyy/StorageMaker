@@ -30,6 +30,5 @@ public:
 	std::string getRegisteredBy() const;
 
 	std::string toText() const;
-	void print() const;
 };
 #endif

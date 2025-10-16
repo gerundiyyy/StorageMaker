@@ -1,139 +1,136 @@
 #include "App.h"
 
 #include <windows.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
 
-#include "ConsolUI.h"
-#include "InputManager.h"
-#include "DataBaseManager.h"
-#include "Item.h"
-#include "Storage.h"
+App::App(DataBaseManager& db, Storage& storage, ConsolUI& ui, InputManager& in)
+    : db_(&db), storage_(&storage), ui_(&ui), in_(&in) {}
 
-void App::run()
-{
-	SetConsoleOutputCP(1251);
-	SetConsoleCP(1251);
-	setlocale(LC_ALL, "Russian");
-	db->createFile("data/product_data.txt");
-
-	try {
-		storage->loadItems(*db);
-	}
-	catch (const runtime_error& e)
-	{
-		cerr << "Ошибка чтения";
-	}
-}
-void App::record()
-{
-	system("cls");
-	Item item = in->inputFullItem();
-	storage->addItem(item);
-	try {
-		db->recordItem(item);
-	}
-	catch (const runtime_error& e)
-	{
-		cerr << "Ошибка записи";
-	}
-}
-void App::deleteItem()
-{
-	system("cls");
-	try {
-		storage->deleteItem();
-		db->recordItem(storage->getItems());
-		ui->showMessage("Товар успешно удалён.");
-	}
-	catch (const std::exception& e) {
-		ui->showMessage(string{ "Ошибка: " } + e.what());
-	}
-}
-void App::printAll()
-{
-	system("cls");
-	for (Item item : storage->getItems())
-	{
-		item.print();
-	}
-}
-void App::changeItem()
-{
-	system("cls");
-	Item item = in->inputFullItem();
-	ui->showMessage("Введите id товара, который хотите переписать:");
-	try {
-		storage->changeItem(item);
-		db->recordItem(storage->getItems());
-		ui->showMessage("Товар успешно изменён.");
-	}
-	catch (const std::exception& e) {
-		ui->showMessage(string{ "Ошибка: " } + e.what());
-	}
-}
-void App::appMenu()
-{
-	bool isContinue;
-	do {
-		system("cls");
-		ui->showAppMenu();
-		ui->showMessage("Введите пункт меню: ");
-		int choice = in->inputMenu();
-		static const std::unordered_map <int, void(App::*)()> menuActions
-		{
-			{1, &App::printAll},
-			{2, &App::searcher},
-			{3, &App::record},
-			{4, &App::deleteItem},
-			{5, &App::changeItem},
-			{0, &App::stop},
-		};
-		auto it = menuActions.find(choice);
-		if (it != menuActions.end()) {
-			(this->*(it->second))();
-		}
-		isContinue = in->isContinue();
-	} while (&isContinue);	
+void App::run() {
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    setlocale(LC_ALL, "Russian");
+    try {
+        db_->createFile("data/product_data.txt");
+        storage_->loadItems(*db_);
+    }
+    catch (const std::exception& e) {
+        showError(std::string("Ошибка при старте: ") + e.what());
+    }
+    appMenu();
 }
 
-const auto App::searcherMenu(int choice)
-{
-	switch(choice)
-	{
-		case 1: return storage->searchById();
-		case 2: return storage->searchByName();
-		case 3: return storage->searchByQuantity();
-		case 4: return storage->searchByPrice();
-		case 5: return storage->searchByDate();
-		case 6: return storage->searchByRegisterdBy();
-		case 0: appMenu();
-	}
+void App::appMenu() {
+    while (true) {
+        system("cls");
+        ui_->showAppMenu();
+        ui_->showMessage("Введите пункт меню: ");
+        int choice = in_->inputMenu();
+        switch (choice) {
+        case 1: printAll(); break;
+        case 2: searcher(); break;
+        case 3: recordItem(); break;
+        case 4: deleteItem(); break;
+        case 5: changeItem(); break;
+        case 0: stop(); return;
+        default: ui_->showMessage("Неверный пункт. Повторите."); break;
+        }
+    }
 }
 
-void App::searcher()
-{
-	bool isContinue;
-	do{
-		system("cls");
-		ui->showSearcherMenu();
-		int choice = in->inputMenu();
-		const auto foundList = searcherMenu(choice);
+void App::recordItem() {
+    system("cls");
+    ui_->printAppHead("ЗАПИСЬ ТОВАРА");
+    try {
+        Item item = in_->inputFullItem();
+        storage_->addItem(item);
+        db_->recordItem(item);
+        ui_->showMessage("Товар успешно добавлен.");
+    }
+    catch (const std::exception& e) {
+        showError(std::string("Ошибка при добавлении: ") + e.what());
+    }
+    if (!askContinueOrBack()) return;
+}
 
-		if (foundList.empty()) {
-			ui->showMessage("Товар не найден.");
-			return;
-		}
-		for (size_t i = 0; i < foundList.size(); ++i)
-			foundList[i]->print();
-		isContinue = in->isContinue();
-	} while (&isContinue);
+void App::deleteItem() {
+    system("cls");
+    ui_->printAppHead("УДАЛЕНИЕ ТОВАРА");
+    try {
+        ui_->showMessage("Введите id товара, который хотите удалить");
+        storage_->deleteItem(); // предполагается, что внутри спрашивается id
+        db_->recordItem(storage_->getItems());
+        ui_->showMessage("Товар успешно удалён.");
+    }
+    catch (const std::exception& e) {
+        showError(std::string("Ошибка при удалении: ") + e.what());
+    }
+    if (!askContinueOrBack()) return;
+}
+
+void App::changeItem() {
+    system("cls");
+    ui_->printAppHead("ИЗМЕНЕНИЕ ТОВАРА");
+    try {
+        ui_->showMessage("Введите новые данные о товаре:");
+        Item item = in_->inputFullItem();
+        ui_->showMessage("Введите id товара, который хотите переписать:");
+        storage_->changeItem(item);
+        db_->recordItem(storage_->getItems());
+        ui_->showMessage("Товар успешно изменён.");
+    }
+    catch (const std::exception& e) {
+        showError(std::string("Ошибка при изменении: ") + e.what());
+    }
+    if (!askContinueOrBack()) return;
+}
+
+void App::printAll() {
+    system("cls");
+    ui_->printItem(storage_->getItems());
+    askContinueOrBack();
+}
+
+std::vector<const Item*> App::searcherMenu(int choice) {
+    switch (choice) {
+    case 1: return storage_->searchById();
+    case 2: return storage_->searchByName();
+    case 3: return storage_->searchByQuantity();
+    case 4: return storage_->searchByPrice();
+    case 5: return storage_->searchByDate();
+    case 6: return storage_->searchByRegisterdBy();
+    default: return {};
+    }
+}
+
+void App::searcher() {
+    while (true) {
+        system("cls");
+        ui_->showSearcherMenu();
+        ui_->showMessage("Выберите критерий поиска или 0 для возврата:");
+        int choice = in_->inputMenu();
+        if (choice == 0) return;
+        ui_->showMessage("Введите зачение для поиска:");
+        auto found = searcherMenu(choice);
+        if (found.empty()) ui_->showMessage("Товар не найден.");
+        else ui_->printItem(found);
+        if (!askContinueOrBack()) return;
+    }
 }
 
 void App::stop() {
-	ui->showMessage("Завершение работы программы...");
-	std::exit(0);
+    ui_->showMessage("Завершение работы программы...");
+    std::exit(0);
+}
+
+void App::showError(const std::string& msg) {
+    ui_->showMessage(std::string("Ошибка: ") + msg);
+    askContinueOrBack();
+}
+
+bool App::askContinueOrBack() {
+    ui_->showMessage("Нажмите любую клавишу для продолжения или 0 чтобы выйти в меню.");
+    int maybe = in_->waitForKey(); // переиспользуем ввод меню: 0 = назад, любое другое = продолжить
+    return maybe != 0;
 }

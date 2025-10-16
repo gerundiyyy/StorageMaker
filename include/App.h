@@ -1,7 +1,9 @@
 #pragma once
 #ifndef STORAGE_MAKER_APP_H_
 #define STORAGE_MAKER_APP_H_
+
 #include <string>
+#include <vector>
 
 #include "ConsolUI.h"
 #include "InputManager.h"
@@ -9,26 +11,32 @@
 #include "Item.h"
 #include "Storage.h"
 
-class App
-{
-private:
-	DataBaseManager* db;
-	Storage* storage;
-	ConsolUI* ui;
-	InputManager* in;
+class App {
 public:
-	App(DataBaseManager& db, Storage& storage, ConsolUI& ui,
-		InputManager& in)
-		: db(&db), storage(&storage), ui(&ui), in(&in) {};
-	void appMenu();
-	void record();
-	void deleteItem();
-	void printAll();
-	void changeItem();
-	void run();
-	void stop();
-	void searcher();
-	const auto searcherMenu(int choice);
+    App(DataBaseManager& db, Storage& storage, ConsolUI& ui, InputManager& in);
+    void run();
+    void appMenu();
+    void stop();
+
+private:
+    DataBaseManager* db_;
+    Storage* storage_;
+    ConsolUI* ui_;
+    InputManager* in_;
+
+    // Actions
+    void recordItem();
+    void deleteItem();
+    void changeItem();
+    void printAll();
+
+    // Search
+    std::vector<const Item*> searcherMenu(int choice);
+    void searcher();
+
+    // Helpers
+    void showError(const std::string& msg);
+    bool askContinueOrBack();
 };
 
-#endif
+#endif // STORAGE_MAKER_APP_H_
