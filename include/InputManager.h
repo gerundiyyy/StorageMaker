@@ -1,40 +1,51 @@
 #pragma once
 #ifndef STORAGE_MAKER_INPUT_H_
 #define STORAGE_MAKER_INPUT_H_
+
 #include <string>
 #include "Product.h"
 #include "ConsolUI.h"
-using namespace std;
 
 class InputManager
 {
 public:
-	InputManager(ConsolUI& ui)
-		: ui(&ui) {}
+    explicit InputManager(ConsolUI& ui)
+        : ui(&ui) {}
 
-	int inputProductId();
-	string inputProductName();
-	int inputProductQuantity();
-	double inputProductPrice();
-	string inputProductDate();
-	string inputProductRegisteredBy();
+    int inputProductId();
+    std::string inputProductName();
+    int inputProductQuantity();
+    double inputProductPrice();
+    std::string inputProductDate();
+    std::string inputProductRegisteredBy();
 
-	void intError();
-	void doubleError();
-	void voidError();
-	void boolError();
+    void intError() const;
+    void doubleError() const;
+    void voidError() const;
+    void boolError() const;
 
-	int toInt(const string& inputObject);
-	double toDouble(const string& inputObject);
+    int toInt(const std::string& inputObject) const;
+    double toDouble(const std::string& inputObject) const;
 
-	bool isInt(const string& inputObject);
-	bool isDouble(const string& inputObject);
-	bool isContinue() const;
+    bool isInt(const std::string& inputObject) const;
+    bool isDouble(const std::string& inputObject) const;
+    bool isContinue() const;
 
-	int waitForKey();
-	int inputMenu();
-	Product inputFullProduct();
+    int waitForKey();
+    int inputMenu();
+    Product inputFullProduct();
+
+    // методы, которые использует App
+    int inputNumberAllowZero();
+    double inputDoubleAllowZero();
+    std::string inputOptionalString();
+
 private:
-	ConsolUI* ui;
+    ConsolUI* ui;
+
+    // простой безопасный getline (не меняет поток состояния наружу)
+    bool readLine(std::string& out) const;
+    std::string trim(const std::string& s) const;
 };
-#endif
+
+#endif // STORAGE_MAKER_INPUT_H_

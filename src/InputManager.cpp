@@ -1,176 +1,206 @@
 #include "InputManager.h"
 
-#include <stdlib.h>
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <regex>
-#include "ProductManager.h"
-#include "Product.h"
-using namespace std;
+#include <algorithm>
+#include <cctype>
 
-//Errors
-void InputManager::boolError()
-{
-	ui->showMessage("Ошибка! Пожалуйста, введите 1 или 0: ");
-}
-void InputManager::intError()
-{
-	ui->showMessage("Ошибка! Пожалуйста, введите целое число : ");
-}
-void InputManager::doubleError()
-{
-	ui->showMessage("Ошибка! Пожалуйста, введите число: ");
-}
-void InputManager::voidError()
-{
-	ui->showMessage("Ошибка! Пожалуйста, введите значение: ");
+// Ошибочные сообщения (не модифицируют объект -> const)
+void InputManager::boolError() const { ui->showMessage("Ошибка! Введите 1 или 0."); }
+void InputManager::intError() const { ui->showMessage("Ошибка! Введите целое число."); }
+void InputManager::doubleError() const { ui->showMessage("Ошибка! Введите число (через точку)."); }
+void InputManager::voidError() const { ui->showMessage("Ошибка! Значение не может быть пустым."); }
+
+// trim простая
+std::string InputManager::trim(const std::string& s) const {
+    auto first = s.find_first_not_of(" \t\r\n");
+    if (first == std::string::npos) return "";
+    auto last = s.find_last_not_of(" \t\r\n");
+    return s.substr(first, last - first + 1);
 }
 
-//Checks and converters
-int InputManager::toInt(const string& inputObject)
-{
-	stringstream isString(inputObject);
-	int intObject;
-	isString >> intObject;
-	return intObject;
+// safe getline
+bool InputManager::readLine(std::string& out) const {
+    if (!std::getline(std::cin, out)) {
+        std::cin.clear();
+        return false;
+    }
+    out = trim(out);
+    return true;
 }
 
-double InputManager::toDouble(const string& inputObject)
-{
-	stringstream isString(inputObject);
-	double doubleObject;
-	isString >> doubleObject;
-	return doubleObject;
+// Конвертеры через stoi/stod с обработкой исключений
+int InputManager::toInt(const std::string& inputObject) const {
+    try {
+        size_t pos = 0;
+        int v = std::stoi(inputObject, &pos);
+        if (pos != inputObject.size()) return 0;
+        return v;
+    }
+    catch (...) {
+        return 0;
+    }
 }
 
-bool InputManager::isInt(const string& inputObject)
-{
-	stringstream isString(inputObject);
-	double isDouble;
-	if (isString >> isDouble && isString.eof())
-	{
-		if (isDouble == static_cast<int>(isDouble)) return true;
-		else intError(); return false;
-	}
-	else doubleError(); return false;
+double InputManager::toDouble(const std::string& inputObject) const {
+    try {
+        size_t pos = 0;
+        double v = std::stod(inputObject, &pos);
+        if (pos != inputObject.size()) return 0.0;
+        return v;
+    }
+    catch (...) {
+        return 0.0;
+    }
 }
 
-bool InputManager::isDouble(const string& inputObject)
-{
-	stringstream isString(inputObject);
-	double isDouble;
-	if (isString >> isDouble && isString.eof()) return true;
-	else doubleError(); return false;
+// Простые проверки
+bool InputManager::isInt(const std::string& inputObject) const {
+    if (inputObject.empty()) { intError(); return false; }
+    try {
+        size_t pos = 0;
+        std::stoi(inputObject, &pos);
+        if (pos != inputObject.size()) { intError(); return false; }
+        return true;
+    }
+    catch (...) {
+        intError();
+        return false;
+    }
 }
 
-//Inputs
-
-bool InputManager::isContinue() const
-{
-	ui->showMessage("Продолжить действие? (1 - да, 0 - нет)");
-	bool isContinue;
-	cin >> isContinue;
-	std::cin.clear();
-	std::cin.ignore(32767, '\n');
-	return isContinue;
+bool InputManager::isDouble(const std::string& inputObject) const {
+    if (inputObject.empty()) { doubleError(); return false; }
+    try {
+        size_t pos = 0;
+        std::stod(inputObject, &pos);
+        if (pos != inputObject.size()) { doubleError(); return false; }
+        return true;
+    }
+    catch (...) {
+        doubleError();
+        return false;
+    }
 }
 
-int InputManager::inputProductId()
-{
-	string objectId;
-	while (true)
-	{
-		getline(cin, objectId);
-		if (isInt(objectId) && !(objectId.empty())) break;
-	}
-	return toInt(objectId);
+// Inputs
+bool InputManager::isContinue() const {
+    ui->showMessage("Продолжить? (1 - да, 0 - нет): ");
+    std::string s;
+    if (!readLine(s)) return false;
+    return (s == "1");
 }
 
-string InputManager::inputProductName()
-{
-	string objectName;
-	while (true)
-	{
-		getline(cin, objectName);
-		if (!(objectName.empty())) break;
-		else voidError();
-	}
-
-	return objectName;
+int InputManager::inputProductId() {
+    std::string s;
+    while (true) {
+        if (!readLine(s)) { ui->showMessage("Ввод прерван."); return 0; }
+        if (!s.empty() && isInt(s)) return toInt(s);
+        // isInt уже показывает ошибку
+    }
 }
 
-int InputManager::inputProductQuantity()
-{
-	string objectQuantity;
-	while (true)
-	{
-		getline(cin, objectQuantity);
-		if (isInt(objectQuantity) && !(objectQuantity.empty())) break;
-	}
-	return toInt(objectQuantity);
+std::string InputManager::inputProductName() {
+    std::string s;
+    while (true) {
+        if (!readLine(s)) { ui->showMessage("Ввод прерван."); return {}; }
+        if (!s.empty()) return s;
+        voidError();
+    }
 }
 
-double InputManager::inputProductPrice()
-{
-	string objectPrice;
-	while (true)
-	{
-		getline(cin, objectPrice);
-		if (isDouble(objectPrice)) break;
-	}
-	return toDouble(objectPrice);
+int InputManager::inputProductQuantity() {
+    std::string s;
+    while (true) {
+        if (!readLine(s)) { ui->showMessage("Ввод прерван."); return 0; }
+        if (!s.empty() && isInt(s)) return toInt(s);
+    }
 }
 
-string InputManager::inputProductDate()
-{
-	string objectDate;
-	getline(cin, objectDate);
-	return objectDate;
+double InputManager::inputProductPrice() {
+    std::string s;
+    while (true) {
+        if (!readLine(s)) { ui->showMessage("Ввод прерван."); return 0.0; }
+        if (!s.empty() && isDouble(s)) return toDouble(s);
+    }
 }
 
-string InputManager::inputProductRegisteredBy()
-{
-	string objectRegisteredBy;
-	getline(cin, objectRegisteredBy);
-	return objectRegisteredBy;
+std::string InputManager::inputProductDate() {
+    std::string s;
+    readLine(s);
+    return s;
 }
 
-Product InputManager::inputFullProduct()
-{
-	Product inputItem;
-
-	cout << "id: ";
-	inputItem.setId(inputProductId());
-	cout << "Имя: ";
-	inputItem.setName(inputProductName());
-	cout << "Количество: ";
-	inputItem.setQuantity(inputProductQuantity());
-	cout << "Цена: ";
-	inputItem.setPrice(inputProductPrice());
-	cout << "Дата регистрации: ";
-	inputItem.setDate(inputProductDate());
-	cout << "Кто зарегестрировал: ";
-	inputItem.setRegisteredBy(inputProductRegisteredBy());
-
-	return inputItem;
+std::string InputManager::inputProductRegisteredBy() {
+    std::string s;
+    readLine(s);
+    return s;
 }
-int InputManager::waitForKey()
-{
-	string s;
-	getline(cin, s); // просто ждём Enter или любой ввод
-	if (s.empty()) return 1;   // пустой ввод — считать "продолжить"
-	if (isInt(s)) return toInt(s); // если ввели число — вернуть его (0 = назад)
-	return 1;
+
+Product InputManager::inputFullProduct() {
+    Product p;
+    ui->showMessage("id: ");
+    p.setId(inputProductId());
+    ui->showMessage("Имя: ");
+    p.setName(inputProductName());
+    ui->showMessage("Количество: ");
+    p.setQuantity(inputProductQuantity());
+    ui->showMessage("Цена: ");
+    p.setPrice(inputProductPrice());
+    ui->showMessage("Дата регистрации: ");
+    p.setDate(inputProductDate());
+    ui->showMessage("Кто зарегистрировал: ");
+    p.setRegisteredBy(inputProductRegisteredBy());
+    return p;
 }
-int InputManager::inputMenu()
-{
-	string menuChoice;
-	while (true)
-	{
-		getline(cin, menuChoice);
-		if (isInt(menuChoice)) return toInt(menuChoice);
-		intError();
-		ui->showMessage("Повторите ввод: ");
-	}
+
+int InputManager::waitForKey() {
+    std::string s;
+    readLine(s);
+    if (s.empty()) return 1;
+    if (isInt(s)) return toInt(s);
+    return 1;
+}
+
+int InputManager::inputMenu() {
+    std::string s;
+    while (true) {
+        if (!readLine(s)) { ui->showMessage("Ввод прерван."); return 0; }
+        if (isInt(s)) return toInt(s);
+        intError();
+    }
+}
+
+// Простые реализации для App
+
+int InputManager::inputNumberAllowZero() {
+    std::string s;
+    while (true) {
+        if (!readLine(s)) { ui->showMessage("Ввод прерван."); return 0; }
+        if (s.empty()) return 0;
+        if (isInt(s)) {
+            int v = toInt(s);
+            if (v >= 0) return v;
+            intError();
+        }
+    }
+}
+
+double InputManager::inputDoubleAllowZero() {
+    std::string s;
+    while (true) {
+        if (!readLine(s)) { ui->showMessage("Ввод прерван."); return 0.0; }
+        if (s.empty()) return 0.0;
+        if (isDouble(s)) {
+            double v = toDouble(s);
+            if (v >= 0.0) return v;
+            doubleError();
+        }
+    }
+}
+
+std::string InputManager::inputOptionalString() {
+    std::string s;
+    if (!readLine(s)) return {};
+    return s;
 }
