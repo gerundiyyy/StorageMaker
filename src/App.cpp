@@ -4,7 +4,11 @@
 #include <cstdlib>
 #include <iostream>
 
-App::App(DataBaseManager& db, Storage& storage, ConsolUI& ui, InputManager& in)
+#include "ProductManager.h"
+#include "ProductStorage.h"
+#include "Product.h"
+
+App::App(ProductManager& db, ProductStorage& storage, ConsolUI& ui, InputManager& in)
     : db_(&db), storage_(&storage), ui_(&ui), in_(&in) {}
 
 void App::run() {
@@ -12,7 +16,7 @@ void App::run() {
     SetConsoleCP(1251);
     setlocale(LC_ALL, "Russian");
     try {
-        db_->createFile("data/product_data.txt");
+        db_->initializeDB("data/product_data.txt");
         storage_->loadItems(*db_);
     }
     catch (const std::exception& e) {
@@ -43,9 +47,9 @@ void App::recordItem() {
     system("cls");
     ui_->printAppHead("ЗАПИСЬ ТОВАРА");
     try {
-        Item item = in_->inputFullItem();
+        Product item = in_->inputFullProduct();
         storage_->addItem(item);
-        db_->recordItem(item);
+        db_->record(item);
         ui_->showMessage("Товар успешно добавлен.");
     }
     catch (const std::exception& e) {
@@ -59,8 +63,8 @@ void App::deleteItem() {
     ui_->printAppHead("УДАЛЕНИЕ ТОВАРА");
     try {
         ui_->showMessage("Введите id товара, который хотите удалить");
-        storage_->deleteItem(); // предполагается, что внутри спрашивается id
-        db_->recordItem(storage_->getItems());
+        storage_->deleteItem();
+        db_->record(storage_->getItems());
         ui_->showMessage("Товар успешно удалён.");
     }
     catch (const std::exception& e) {
@@ -74,10 +78,10 @@ void App::changeItem() {
     ui_->printAppHead("ИЗМЕНЕНИЕ ТОВАРА");
     try {
         ui_->showMessage("Введите новые данные о товаре:");
-        Item item = in_->inputFullItem();
+        Product item = in_->inputFullProduct();
         ui_->showMessage("Введите id товара, который хотите переписать:");
         storage_->changeItem(item);
-        db_->recordItem(storage_->getItems());
+        db_->record(storage_->getItems());
         ui_->showMessage("Товар успешно изменён.");
     }
     catch (const std::exception& e) {
@@ -88,18 +92,18 @@ void App::changeItem() {
 
 void App::printAll() {
     system("cls");
-    ui_->printItem(storage_->getItems());
+    ui_->printProduct(storage_->getItems());
     askContinueOrBack();
 }
 
-std::vector<const Item*> App::searcherMenu(int choice) {
+std::vector<const Product*> App::searcherMenu(int choice) {
     switch (choice) {
     case 1: return storage_->searchById();
     case 2: return storage_->searchByName();
     case 3: return storage_->searchByQuantity();
     case 4: return storage_->searchByPrice();
     case 5: return storage_->searchByDate();
-    case 6: return storage_->searchByRegisterdBy();
+    case 6: return storage_->searchByRegisteredBy();
     default: return {};
     }
 }
@@ -114,7 +118,7 @@ void App::searcher() {
         ui_->showMessage("Введите зачение для поиска:");
         auto found = searcherMenu(choice);
         if (found.empty()) ui_->showMessage("Товар не найден.");
-        else ui_->printItem(found);
+        else ui_->printProduct(found);
         if (!askContinueOrBack()) return;
     }
 }
@@ -131,6 +135,6 @@ void App::showError(const std::string& msg) {
 
 bool App::askContinueOrBack() {
     ui_->showMessage("Нажмите любую клавишу для продолжения или 0 чтобы выйти в меню.");
-    int maybe = in_->waitForKey(); // переиспользуем ввод меню: 0 = назад, любое другое = продолжить
+    int maybe = in_->waitForKey();
     return maybe != 0;
 }

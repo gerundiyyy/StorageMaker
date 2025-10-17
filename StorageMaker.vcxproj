@@ -20,21 +20,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\AuthManager.cpp" />
     <ClCompile Include="src\ConsolUI.cpp" />
-    <ClCompile Include="src\DataBaseManager.cpp" />
+    <ClCompile Include="src\ProductManager.cpp" />
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Item.cpp" />
-    <ClCompile Include="src\Storage.cpp" />
+    <ClCompile Include="src\Product.cpp" />
+    <ClCompile Include="src\ProductStorage.cpp" />
+    <ClCompile Include="src\User.cpp" />
+    <ClCompile Include="src\UserManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h" />
+    <ClInclude Include="include\AuthManager.h" />
     <ClInclude Include="include\ConsolUI.h" />
-    <ClInclude Include="include\DataBaseManager.h" />
+    <ClInclude Include="include\ProductManager.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\IDataBaseManager.h" />
     <ClInclude Include="include\InputManager.h" />
-    <ClInclude Include="include\Item.h" />
-    <ClInclude Include="include\ItemExtractor.h" />
     <ClInclude Include="include\Storage.h" />
+    <ClInclude Include="include\ItemExtractor.h" />
+    <ClInclude Include="include\Product.h" />
+    <ClInclude Include="include\ProductStorage.h" />
+    <ClInclude Include="include\User.h" />
+    <ClInclude Include="include\UserManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\product_data.txt" />

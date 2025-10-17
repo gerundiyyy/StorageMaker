@@ -1,19 +1,26 @@
-﻿#include "App.h"
+﻿#include "ProductManager.h"
+#include "ProductStorage.h"
+#include "ConsolUI.h"
+#include "InputManager.h"
+#include "ItemExtractor.h"
+#include "App.h"
 
 int main()
 {
-	DataBaseManager* db = new DataBaseManager();
-	ConsolUI* ui = new ConsolUI();
-	InputManager* in = new InputManager(*ui);
-	ItemExtractor* ex = new ItemExtractor();
-	Storage* storage = new Storage(*ex, *in, *ui);
-	App* app = new App(*db, *storage, *ui, *in);
-	app->run();
-	app->appMenu();
-	delete db;
-	delete storage;
-	delete ui;
-	delete in;
-	delete ex;
-	delete app;
+    try {
+        // Создаём конкретные типы — не абстрактные
+        ProductManager db;
+        ConsolUI ui;
+        InputManager in(ui);
+        ItemExtractor<Product> ex;                  // шаблонный извлекатель для Product
+        ProductStorage storage(ex, in, ui);         // конкретный Storage<Product>
+        App app(db, storage, ui, in);               // App принимает конкретные типы
+
+        app.run();
+        return 0;
+    }
+    catch (const std::exception& e) {
+        // Если хотите — используйте std::cerr
+        return 1;
+    }
 }
