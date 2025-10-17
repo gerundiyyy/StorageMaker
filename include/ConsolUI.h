@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
-#include "Item.h"
+#include "Product.h"
 using namespace std;
 
 class ConsolUI
@@ -25,12 +25,12 @@ public:
 	void showSearcherMenu();
 	void showMessage(const std::string& message);
     void printAppHead(const std::string& tittle);
-    void printItemHead();
-	void printItem(const Item& item);
+    void printProductHead();
+	void printProduct(const Product& item);
     std::string center(const std::string& tittle, int width);
 
     template<typename T>
-    void printItemByPointer(T* item)
+    void printProductByPointer(T* item)
     {
         std::cout << " ---------------------------------------------------------------------------------------------------- \n";
         std::cout << " | "
@@ -42,7 +42,7 @@ public:
             << std::setw(widthUser) << std::left << item->getRegisteredBy() << " |\n";
     }
     template<typename T>
-    void printItemByAdress(T& item)
+    void printProductByAdress(T& item)
     {
         std::cout << " ---------------------------------------------------------------------------------------------------- \n";
         std::cout << " | "
@@ -55,13 +55,13 @@ public:
     }
 
     template<typename Container>
-    void printItem(const Container& items)
+    void printProduct(const Container& items)
     {
-        printItemHead();
+        printProductHead();
         for (const auto& item : items)
         {
-            if constexpr (std::is_pointer_v<std::decay_t<decltype(item)>>) printItemByPointer(item);
-            else printItemByAdress(item);
+            if constexpr (std::is_pointer_v<std::decay_t<decltype(item)>>) printProductByPointer(item);
+            else printProductByAdress(item);
         }
         std::cout << " ==================================================================================================== \n";
     }

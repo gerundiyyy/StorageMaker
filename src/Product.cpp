@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "DataBaseManager.h"
+#include "ProductManager.h"
 using namespace std;
 
 //Constructor and Destructors

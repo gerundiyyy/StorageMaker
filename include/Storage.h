@@ -1,56 +1,56 @@
 #pragma once
-#ifndef STORAGE_MAKER_STORAGE_H_
-#define STORAGE_MAKER_STORAGE_H_
-
 #include <algorithm>
 #include <vector>
 #include <functional>
 #include <string>
 #include <sstream>
 #include <type_traits>
+
 #include "ItemExtractor.h"
-#include "Item.h"
-#include "InputManager.h"   
-#include "ConsolUI.h" 
+#include "InputManager.h"
+#include "ConsolUI.h"
 
-class DataBaseManager;
-class ItemExtractor;
-
-class Storage
-{
+template<typename T>
+class Storage {
 public:
-    Storage(ItemExtractor& ex, InputManager& in, ConsolUI& ui)
+    Storage(ItemExtractor<T>& ex, InputManager& in, ConsolUI& ui)
         : ex(&ex), in(&in), ui(&ui) {}
 
-    void loadItems(DataBaseManager& db);
-    void addItem(const Item& item);
-    void deleteItem();
-    void changeItem(const Item& item);
+    void addItem(const T& item) {
+        Items.push_back(item);
+        sortBy([](const T& it) { return it.getId(); }, true);
+    }
 
-    const std::vector<Item>& getItems() const;
-    int singleSearchById() const;
-    std::vector<const Item*> searchById() const;
-    std::vector<const Item*> searchByName() const;
-    std::vector<const Item*> searchByQuantity() const;
-    std::vector<const Item*> searchByPrice() const;
-    std::vector<const Item*> searchByDate () const;
-    std::vector<const Item*> searchByRegisterdBy() const;
+    virtual void deleteItem() = 0;
+    virtual void changeItem(const T& item) = 0;
 
-    template<typename T>
-    static std::string to_string_any(const T& value) {
-        if constexpr (std::is_same_v<T, std::string>) {
+    const std::vector<T>& getItems() const {
+        return Items;
+    }
+
+    int singleSearchById() const {
+        const int needle = in->inputProductId();
+        for (int i = 0; i < static_cast<int>(Items.size()); ++i) {
+            if (Items[i].getId() == needle) return i;
+        }
+        return -1;
+    }
+
+    template<typename U>
+    static std::string to_string_any(const U& value) {
+        if constexpr (std::is_same_v<U, std::string>) {
             return value;
         }
-        else if constexpr (std::is_same_v<T, const char*>) {
+        else if constexpr (std::is_same_v<U, const char*>) {
             return std::string(value);
         }
-        else if constexpr (std::is_same_v<T, char>) {
+        else if constexpr (std::is_same_v<U, char>) {
             return std::string(1, value);
         }
-        else if constexpr (std::is_same_v<T, bool>) {
+        else if constexpr (std::is_same_v<U, bool>) {
             return value ? "true" : "false";
         }
-        else if constexpr (std::is_arithmetic_v<T>) {
+        else if constexpr (std::is_arithmetic_v<U>) {
             return std::to_string(value);
         }
         else {
@@ -61,11 +61,12 @@ public:
     }
 
     template<typename Key>
-    std::vector<const Item*> searchBy(const Key& key, std::function<std::string(const Item&)> extractor) const
-    {
+    std::vector<const T*> searchBy(
+        const Key& key,
+        std::function<std::string(const T&)> extractor
+    ) const {
         std::string needle = to_string_any(key);
-
-        std::vector<const Item*> results;
+        std::vector<const T*> results;
         for (const auto& item : Items) {
             std::string hay = extractor(item);
             if (hay.find(needle) != std::string::npos) {
@@ -74,12 +75,24 @@ public:
         }
         return results;
     }
-    template<typename Key>
-    void sortBy(Key key, bool ascending);
-private:
-	std::vector <Item> Items;
-    ItemExtractor* ex;
+
+    template<typename KeyFunc>
+    void sortBy(KeyFunc key, bool ascending) {
+        if (ascending) {
+            std::sort(Items.begin(), Items.end(), [&](const T& a, const T& b) {
+                return key(a) < key(b);
+                });
+        }
+        else {
+            std::sort(Items.begin(), Items.end(), [&](const T& a, const T& b) {
+                return key(b) < key(a);
+                });
+        }
+    }
+
+protected:
+    std::vector<T> Items;
+    ItemExtractor<T>* ex;
     InputManager* in;
     ConsolUI* ui;
 };
-#endif

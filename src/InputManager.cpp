@@ -5,8 +5,8 @@
 #include <string>
 #include <sstream>
 #include <regex>
-#include "DataBaseManager.h"
-#include "Item.h"
+#include "ProductManager.h"
+#include "Product.h"
 using namespace std;
 
 //Errors
@@ -76,7 +76,7 @@ bool InputManager::isContinue() const
 	return isContinue;
 }
 
-int InputManager::inputItemId()
+int InputManager::inputProductId()
 {
 	string objectId;
 	while (true)
@@ -87,7 +87,7 @@ int InputManager::inputItemId()
 	return toInt(objectId);
 }
 
-string InputManager::inputItemName()
+string InputManager::inputProductName()
 {
 	string objectName;
 	while (true)
@@ -100,7 +100,7 @@ string InputManager::inputItemName()
 	return objectName;
 }
 
-int InputManager::inputItemQuantity()
+int InputManager::inputProductQuantity()
 {
 	string objectQuantity;
 	while (true)
@@ -111,7 +111,7 @@ int InputManager::inputItemQuantity()
 	return toInt(objectQuantity);
 }
 
-double InputManager::inputItemPrice()
+double InputManager::inputProductPrice()
 {
 	string objectPrice;
 	while (true)
@@ -122,36 +122,36 @@ double InputManager::inputItemPrice()
 	return toDouble(objectPrice);
 }
 
-string InputManager::inputItemDate()
+string InputManager::inputProductDate()
 {
 	string objectDate;
 	getline(cin, objectDate);
 	return objectDate;
 }
 
-string InputManager::inputItemRegisteredBy()
+string InputManager::inputProductRegisteredBy()
 {
 	string objectRegisteredBy;
 	getline(cin, objectRegisteredBy);
 	return objectRegisteredBy;
 }
 
-Item InputManager::inputFullItem()
+Product InputManager::inputFullProduct()
 {
-	Item inputItem;
+	Product inputItem;
 
 	cout << "id: ";
-	inputItem.setId(inputItemId());
+	inputItem.setId(inputProductId());
 	cout << "Имя: ";
-	inputItem.setName(inputItemName());
+	inputItem.setName(inputProductName());
 	cout << "Количество: ";
-	inputItem.setQuantity(inputItemQuantity());
+	inputItem.setQuantity(inputProductQuantity());
 	cout << "Цена: ";
-	inputItem.setPrice(inputItemPrice());
+	inputItem.setPrice(inputProductPrice());
 	cout << "Дата регистрации: ";
-	inputItem.setDate(inputItemDate());
+	inputItem.setDate(inputProductDate());
 	cout << "Кто зарегестрировал: ";
-	inputItem.setRegisteredBy(inputItemRegisteredBy());
+	inputItem.setRegisteredBy(inputProductRegisteredBy());
 
 	return inputItem;
 }

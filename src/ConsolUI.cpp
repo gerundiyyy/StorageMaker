@@ -4,8 +4,8 @@
 #include <string>
 #include <iomanip>
 #include "InputManager.h"
-#include "DataBaseManager.h"
-#include "Item.h"
+#include "ProductManager.h"
+#include "Product.h"
 
 using namespace std;
 void ConsolUI::showAppMenu()
@@ -50,7 +50,7 @@ void ConsolUI::printAppHead(const string& tittle)
         << setw(widthhead) << center(tittle, widthhead) << " |\n";
     cout << " ==================================================================================================== \n";
 }
-void ConsolUI::printItemHead()
+void ConsolUI::printProductHead()
 {
     cout << " ==================================================================================================== \n";
     cout << " | "
@@ -80,10 +80,10 @@ string ConsolUI::center(const string& tittle, int width)
     }
     return result;
 }
-void ConsolUI::printItem(const Item& item)
+void ConsolUI::printProduct(const Product& item)
 {
-    printItemHead();
-    printItemByAdress(item);
+    printProductHead();
+    printProductByAdress(item);
 }
 void ConsolUI::showMessage(const string& message)
 {

@@ -7,20 +7,20 @@
 
 #include "ConsolUI.h"
 #include "InputManager.h"
-#include "DataBaseManager.h"
-#include "Item.h"
-#include "Storage.h"
+#include "ProductManager.h"
+#include "Product.h"
+#include "ProductStorage.h"
 
 class App {
 public:
-    App(DataBaseManager& db, Storage& storage, ConsolUI& ui, InputManager& in);
+    App(ProductManager& db, ProductStorage& storage, ConsolUI& ui, InputManager& in);
     void run();
     void appMenu();
     void stop();
 
 private:
-    DataBaseManager* db_;
-    Storage* storage_;
+    ProductManager* db_;
+    ProductStorage* storage_;
     ConsolUI* ui_;
     InputManager* in_;
 
@@ -31,7 +31,7 @@ private:
     void printAll();
 
     // Search
-    std::vector<const Item*> searcherMenu(int choice);
+    std::vector<const Product*> searcherMenu(int choice);
     void searcher();
 
     // Helpers

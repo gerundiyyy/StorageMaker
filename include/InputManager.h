@@ -2,7 +2,7 @@
 #ifndef STORAGE_MAKER_INPUT_H_
 #define STORAGE_MAKER_INPUT_H_
 #include <string>
-#include "Item.h"
+#include "Product.h"
 #include "ConsolUI.h"
 using namespace std;
 
@@ -12,12 +12,12 @@ public:
 	InputManager(ConsolUI& ui)
 		: ui(&ui) {}
 
-	int inputItemId();
-	string inputItemName();
-	int inputItemQuantity();
-	double inputItemPrice();
-	string inputItemDate();
-	string inputItemRegisteredBy();
+	int inputProductId();
+	string inputProductName();
+	int inputProductQuantity();
+	double inputProductPrice();
+	string inputProductDate();
+	string inputProductRegisteredBy();
 
 	void intError();
 	void doubleError();
@@ -29,13 +29,11 @@ public:
 
 	bool isInt(const string& inputObject);
 	bool isDouble(const string& inputObject);
-	/*bool isBool(const string& inputObject);*/
 	bool isContinue() const;
-	/*bool inputBool();*/
 
 	int waitForKey();
 	int inputMenu();
-	Item inputFullItem();
+	Product inputFullProduct();
 private:
 	ConsolUI* ui;
 };
