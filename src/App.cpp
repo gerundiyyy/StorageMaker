@@ -1,5 +1,7 @@
 #include "App.h"
 
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <cstdlib>
 #include <iostream>
@@ -113,15 +115,61 @@ void App::searcher() {
         system("cls");
         ui_->showSearcherMenu();
         ui_->showMessage("Выберите критерий поиска или 0 для возврата:");
-        int choice = in_->inputMenu();
-        if (choice == 0) return;
-        ui_->showMessage("Введите зачение для поиска:");
-        auto found = searcherMenu(choice);
-        if (found.empty()) ui_->showMessage("Товар не найден.");
-        else ui_->printProduct(found);
-        if (!askContinueOrBack()) return;
+        ui_->showMessage("1 - Простой поиск по полю\n2 - Продвинутый фильтр (несколько условий)");
+        int mode = in_->inputMenu();
+        if (mode == 0) return;
+        if (mode == 1) {
+            ui_->showMessage("Выберите поле для простого поиска:");
+            int choice = in_->inputMenu();
+            if (choice == 0) continue;
+            ui_->showMessage("Введите значение для поиска:");
+            auto found = searcherMenu(choice);
+            if (found.empty()) ui_->showMessage("Товар не найден.");
+            else ui_->printProduct(found);
+            if (!askContinueOrBack()) return;
+        }
+        else if (mode == 2) {
+            ProductStorage::Filter f;
+            ui_->showMessage("Введите минимальное количество месяцев на складе (или 0 чтобы пропустить):");
+            int months = in_->inputNumberAllowZero();
+            if (months > 0) f.minMonthsAgo = months;
+
+            ui_->showMessage("Введите минимальную цену (или 0 чтобы пропустить):");
+            double price = in_->inputDoubleAllowZero();
+            if (price > 0.0) f.minPrice = price;
+
+            ui_->showMessage("Введите минимальное количество (или 0 чтобы пропустить):");
+            int qty = in_->inputNumberAllowZero();
+            if (qty > 0) f.minQuantity = qty;
+
+            ui_->showMessage("Введите часть названия для поиска (пустая строка чтобы пропустить):");
+            std::string namePart = in_->inputOptionalString();
+            if (!namePart.empty()) f.nameContains = namePart;
+
+            ui_->showMessage("Введите часть ФИО регистратора (пустая строка чтобы пропустить):");
+            std::string reg = in_->inputOptionalString();
+            if (!reg.empty()) f.registeredBy = reg;
+
+            ui_->showMessage("По какому полю отсортировать результат? (id,name,quantity,price,date,registeredBy или пусто):");
+            std::string key = in_->inputOptionalString();
+            if (!key.empty()) {
+                f.sortKey = key;
+                ui_->showMessage("Направление сортировки: 1 - по возрастанию, 2 - по убыванию");
+                int dir = in_->inputMenu();
+                f.ascending = (dir != 2);
+            }
+
+            auto result = storage_->filter(f);
+            if (result.empty()) ui_->showMessage("Ничего не найдено по заданным критериям.");
+            else ui_->printProduct(result);
+            if (!askContinueOrBack()) return;
+        }
+        else {
+            ui_->showMessage("Неверный режим поиска.");
+        }
     }
 }
+
 
 void App::stop() {
     ui_->showMessage("Завершение работы программы...");
