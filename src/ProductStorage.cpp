@@ -23,9 +23,9 @@ void ProductStorage::deleteItem()
     sortBy([](const Product& it) { return it.getId(); }, true);
     int idx = singleSearchById();
     if (idx < 0)
-        throw runtime_error("Товар не найден.");
+        throw std::runtime_error("Товар не найден.");
     if (static_cast<size_t>(idx) >= Items.size())
-        throw out_of_range("Некорректный индекс удаления.");
+        throw std::out_of_range("Некорректный индекс удаления.");
     Items.erase(Items.begin() + idx);
 }
 
@@ -34,9 +34,9 @@ void ProductStorage::changeItem(const Product& item)
     sortBy([](const Product& it) { return it.getId(); }, true);
     int idx = singleSearchById();
     if (idx < 0)
-        throw runtime_error("Товар не найден.");
+        throw std::runtime_error("Товар не найден.");
     if (static_cast<size_t>(idx) >= Items.size())
-        throw out_of_range("Некорректный индекс изменения.");
+        throw std::out_of_range("Некорректный индекс изменения.");
     Items.erase(Items.begin() + idx);
     addItem(item);
 }
@@ -142,7 +142,7 @@ std::vector<const Product*> ProductStorage::filter(const Filter& f) const {
 
     // Сортировка результата по ключу (если указан)
     if (f.sortKey) {
-        const string k = *f.sortKey;
+        const std::string k = *f.sortKey;
         std::sort(res.begin(), res.end(), [&](const Product* a, const Product* b) {
             if (k == "id") {
                 return f.ascending ? a->getId() < b->getId() : a->getId() > b->getId();

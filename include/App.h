@@ -1,42 +1,46 @@
 #pragma once
-#ifndef STORAGE_MAKER_APP_H_
-#define STORAGE_MAKER_APP_H_
-
-#include <string>
 #include <vector>
+#include <string>
 
+#include "ProductManager.h"
+#include "ProductStorage.h"
+#include "UserManager.h"
+#include "AuthManager.h"
 #include "ConsolUI.h"
 #include "InputManager.h"
-#include "ProductManager.h"
 #include "Product.h"
-#include "ProductStorage.h"
 
 class App {
 public:
-    App(ProductManager& db, ProductStorage& storage, ConsolUI& ui, InputManager& in);
+    App(ProductManager& pdb,
+        ProductStorage& pstorage,
+        UserManager& um,
+        AuthManager& auth,
+        ConsolUI& ui,
+        InputManager& in);
+
     void run();
-    void appMenu();
-    void stop();
 
 private:
     ProductManager* db_;
     ProductStorage* storage_;
+    UserManager* users_;
+    AuthManager* auth_;
     ConsolUI* ui_;
     InputManager* in_;
 
-    // Actions
+    void appMenu();
+    void printAll();
     void recordItem();
     void deleteItem();
     void changeItem();
-    void printAll();
-
-    // Search
-    std::vector<const Product*> searcherMenu(int choice);
+    void simpleSearch();
+    void advancedSearch();
     void searcher();
-
-    // Helpers
+    ProductStorage::Filter buildFilterFromInput();
+    std::vector<const Product*> searcherMenu(int choice);
+    void stop();
     void showError(const std::string& msg);
     bool askContinueOrBack();
+    bool requireAdmin();
 };
-
-#endif // STORAGE_MAKER_APP_H_

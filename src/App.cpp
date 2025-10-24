@@ -1,30 +1,41 @@
 #include "App.h"
 
-#define NOMINMAX
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+
 #include <cstdlib>
 #include <iostream>
 
-#include "ProductManager.h"
-#include "ProductStorage.h"
-#include "Product.h"
-
-App::App(ProductManager& db, ProductStorage& storage, ConsolUI& ui, InputManager& in)
-    : db_(&db), storage_(&storage), ui_(&ui), in_(&in) {}
+App::App(ProductManager& pdb,
+    ProductStorage& pstorage,
+    UserManager& um,
+    AuthManager& auth,
+    ConsolUI& ui,
+    InputManager& in)
+    : db_(&pdb), storage_(&pstorage), users_(&um), auth_(&auth), ui_(&ui), in_(&in) {}
 
 void App::run() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
     setlocale(LC_ALL, "Russian");
+
     try {
         db_->initializeDB("data/product_data.txt");
         storage_->loadItems(*db_);
+        users_->initializeDB("data/users.txt"); // загрузка пользователей
     }
     catch (const std::exception& e) {
         showError(std::string("Ошибка при старте: ") + e.what());
     }
+
+    auth_->requireLogin();
+
     appMenu();
+}
+
+bool App::requireAdmin() {
+    if (auth_->currentIsAdmin()) return true;
+    ui_->showMessage("Операция требует прав администратора. Войдите как админ.");
+    return auth_->login();
 }
 
 void App::appMenu() {
@@ -33,18 +44,26 @@ void App::appMenu() {
         ui_->showAppMenu();
         ui_->showMessage("Введите пункт меню: ");
         int choice = in_->inputMenu();
+
         switch (choice) {
         case 1: printAll(); break;
         case 2: searcher(); break;
-        case 3: recordItem(); break;
-        case 4: deleteItem(); break;
-        case 5: changeItem(); break;
+        case 3: if (requireAdmin()) recordItem(); break;
+        case 4: if (requireAdmin()) deleteItem(); break;
+        case 5: if (requireAdmin()) changeItem(); break;
+        case 6: auth_->ensureAdminPanel(); break;
+        case 7:
+            if (auth_->isLogged()) {
+                auth_->logout();
+                ui_->showMessage("Вы вышли из системы.");
+            }
+            else auth_->login();
+            break;
         case 0: stop(); return;
         default: ui_->showMessage("Неверный пункт. Повторите."); break;
         }
     }
 }
-
 void App::recordItem() {
     system("cls");
     ui_->printAppHead("ЗАПИСЬ ТОВАРА");
@@ -118,50 +137,13 @@ void App::searcher() {
         ui_->showMessage("1 - Простой поиск по полю\n2 - Продвинутый фильтр (несколько условий)");
         int mode = in_->inputMenu();
         if (mode == 0) return;
+
         if (mode == 1) {
-            ui_->showMessage("Выберите поле для простого поиска:");
-            int choice = in_->inputMenu();
-            if (choice == 0) continue;
-            ui_->showMessage("Введите значение для поиска:");
-            auto found = searcherMenu(choice);
-            if (found.empty()) ui_->showMessage("Товар не найден.");
-            else ui_->printProduct(found);
+            simpleSearch();
             if (!askContinueOrBack()) return;
         }
         else if (mode == 2) {
-            ProductStorage::Filter f;
-            ui_->showMessage("Введите минимальное количество месяцев на складе (или 0 чтобы пропустить):");
-            int months = in_->inputNumberAllowZero();
-            if (months > 0) f.minMonthsAgo = months;
-
-            ui_->showMessage("Введите минимальную цену (или 0 чтобы пропустить):");
-            double price = in_->inputDoubleAllowZero();
-            if (price > 0.0) f.minPrice = price;
-
-            ui_->showMessage("Введите минимальное количество (или 0 чтобы пропустить):");
-            int qty = in_->inputNumberAllowZero();
-            if (qty > 0) f.minQuantity = qty;
-
-            ui_->showMessage("Введите часть названия для поиска (пустая строка чтобы пропустить):");
-            std::string namePart = in_->inputOptionalString();
-            if (!namePart.empty()) f.nameContains = namePart;
-
-            ui_->showMessage("Введите часть ФИО регистратора (пустая строка чтобы пропустить):");
-            std::string reg = in_->inputOptionalString();
-            if (!reg.empty()) f.registeredBy = reg;
-
-            ui_->showMessage("По какому полю отсортировать результат? (id,name,quantity,price,date,registeredBy или пусто):");
-            std::string key = in_->inputOptionalString();
-            if (!key.empty()) {
-                f.sortKey = key;
-                ui_->showMessage("Направление сортировки: 1 - по возрастанию, 2 - по убыванию");
-                int dir = in_->inputMenu();
-                f.ascending = (dir != 2);
-            }
-
-            auto result = storage_->filter(f);
-            if (result.empty()) ui_->showMessage("Ничего не найдено по заданным критериям.");
-            else ui_->printProduct(result);
+            advancedSearch();
             if (!askContinueOrBack()) return;
         }
         else {
@@ -170,6 +152,53 @@ void App::searcher() {
     }
 }
 
+void App::simpleSearch() {
+    ui_->showMessage("Выберите поле для простого поиска (0 чтобы отменить):");
+    int choice = in_->inputMenu();
+    if (choice == 0) return;
+
+    ui_->showMessage("Введите значение для поиска:");
+    auto found = searcherMenu(choice);
+    if (found.empty()) ui_->showMessage("Товар не найден.");
+    else ui_->printProduct(found);
+}
+
+void App::advancedSearch() {
+    ProductStorage::Filter f = buildFilterFromInput();
+
+    auto result = storage_->filter(f);
+    if (result.empty()) ui_->showMessage("Ничего не найдено по заданным критериям.");
+    else ui_->printProduct(result);
+}
+
+ProductStorage::Filter App::buildFilterFromInput() {
+    ProductStorage::Filter f;
+
+    ui_->showMessage("Введите минимальное количество месяцев на складе (или 0 чтобы пропустить):");
+    if (int months = in_->inputNumberAllowZero(); months > 0) f.minMonthsAgo = months;
+
+    ui_->showMessage("Введите минимальную цену (или 0 чтобы пропустить):");
+    if (double price = in_->inputDoubleAllowZero(); price > 0.0) f.minPrice = price;
+
+    ui_->showMessage("Введите минимальное количество (или 0 чтобы пропустить):");
+    if (int qty = in_->inputNumberAllowZero(); qty > 0) f.minQuantity = qty;
+
+    ui_->showMessage("Введите часть названия для поиска (пустая строка чтобы пропустить):");
+    if (std::string s = in_->inputOptionalString(); !s.empty()) f.nameContains = std::move(s);
+
+    ui_->showMessage("Введите часть ФИО регистратора (пустая строка чтобы пропустить):");
+    if (std::string s = in_->inputOptionalString(); !s.empty()) f.registeredBy = std::move(s);
+
+    ui_->showMessage("По какому полю отсортировать результат? (id,name,quantity,price,date,registeredBy или пусто):");
+    if (std::string key = in_->inputOptionalString(); !key.empty()) {
+        f.sortKey = std::move(key);
+        ui_->showMessage("Направление сортировки: 1 - по возрастанию, 2 - по убыванию");
+        int dir = in_->inputMenu();
+        f.ascending = (dir != 2);
+    }
+
+    return f;
+}
 
 void App::stop() {
     ui_->showMessage("Завершение работы программы...");

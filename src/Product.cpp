@@ -7,8 +7,8 @@
 using namespace std;
 
 //Constructor and Destructors
-Product::Product(int id)
-	: Entity(id), quantity(0), price(0),
+Product::Product(int id, string name)
+	: Entity(id, name), quantity(0), price(0),
 	date("01-01-2000"), registeredBy("None") {}
 Product::Product()
 	: Entity() ,quantity(0), price(0),

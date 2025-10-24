@@ -9,7 +9,7 @@ private:
 	std::string date;
 	std::string registeredBy;
 public:
-	Product(int id);
+	Product(int id, std::string name);
 	Product();
 
 	void setQuantity(int quantity);

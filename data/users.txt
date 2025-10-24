@@ -1,0 +1,21 @@
+id: 1
+username: admin
+password: 16559146482384667732
+role: admin
+registeredBy: system
+date: 2025-10-17
+===
+id: 1
+username: arhip
+password: 11986255325338347591
+role: user
+registeredBy: admin
+date: 
+===
+id: 2
+username: milena
+password: 5918136524199545161
+role: admin
+registeredBy: admin
+date: 
+===
