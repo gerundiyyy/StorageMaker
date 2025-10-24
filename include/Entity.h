@@ -6,8 +6,8 @@ private:
 	int id;
 	std::string name;
 public:
-	Entity(int id)
-		: id(id), name("None") {}
+	Entity(int id, std::string name)
+		: id(id), name(name) {}
 	Entity()
 		: id(0), name("None") {}
 	void setId(int id)

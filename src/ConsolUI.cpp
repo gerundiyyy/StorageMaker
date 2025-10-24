@@ -1,17 +1,16 @@
 ﻿#include "ConsolUI.h"
-
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include "InputManager.h"
-#include "ProductManager.h"
 #include "Product.h"
+#include "User.h"
 
 using namespace std;
+
 void ConsolUI::showAppMenu()
 {
     printAppHead("StorageMaker");
-    cout << " | " << setw(widthhead) << left << "1 - Вывод всех данных" << " | \n";
+    cout << " | " << setw(widthhead) << left << "1 - Вывод всех товаров" << " | \n";
     cout << " ---------------------------------------------------------------------------------------------------- \n";
     cout << " | " << setw(widthhead) << left << "2 - Поиск " << " | \n";
     cout << " ---------------------------------------------------------------------------------------------------- \n";
@@ -21,9 +20,28 @@ void ConsolUI::showAppMenu()
     cout << " ---------------------------------------------------------------------------------------------------- \n";
     cout << " | " << setw(widthhead) << left << "5 - Изменить товар" << " | \n";
     cout << " ---------------------------------------------------------------------------------------------------- \n";
+    cout << " | " << setw(widthhead) << left << "6 - Админ панель (пользователи)" << " | \n";
+    cout << " ---------------------------------------------------------------------------------------------------- \n";
+    cout << " | " << setw(widthhead) << left << "7 - Вход/Выход" << " | \n";
+    cout << " ---------------------------------------------------------------------------------------------------- \n";
     cout << " | " << setw(widthhead) << left << "0 - Выход из программы" << " | \n";
     cout << " ==================================================================================================== \n";
 }
+void ConsolUI::showAdminMenu()
+{
+    printAppHead("Админ панель");
+    cout << " | " << setw(widthhead) << left << "1 - Показать пользователей" << " | \n";
+    cout << " ---------------------------------------------------------------------------------------------------- \n";
+    cout << " | " << setw(widthhead) << left << "2 - Добавить пользователя" << " | \n";
+    cout << " ---------------------------------------------------------------------------------------------------- \n";
+    cout << " | " << setw(widthhead) << left << "3 - Удалить пользователя" << " | \n";
+    cout << " ---------------------------------------------------------------------------------------------------- \n";
+    cout << " | " << setw(widthhead) << left << "4 - Назначить/снять админа" << " | \n";
+    cout << " ---------------------------------------------------------------------------------------------------- \n";
+    cout << " | " << setw(widthhead) << left << "0 - Выход" << " | \n";
+    cout << " ==================================================================================================== \n";
+}
+
 void ConsolUI::showSearcherMenu()
 {
     printAppHead("Поиск");
@@ -68,7 +86,7 @@ void ConsolUI::printProductHead()
 string ConsolUI::center(const string& tittle, int width)
 {
     string result;
-    int spaces = (width - tittle.length()) / 2;
+    int spaces = (width - (int)tittle.length()) / 2;
     for (int i = 0; i < spaces; i++)
     {
         result += " ";
@@ -84,12 +102,55 @@ void ConsolUI::printProduct(const Product& item)
 {
     printProductHead();
     printProductByAdress(item);
+    cout << " ==================================================================================================== \n";
 }
 void ConsolUI::showMessage(const string& message)
 {
-	cout << message << endl;
+    cout << message << endl;
 }
 void ConsolUI::showError(const string& error)
 {
     cout << "!!!" << error << "!!!" << endl;
+}
+
+// ---- users table implementation ----
+
+void ConsolUI::printUserHead()
+{
+    cout << " ================================================================================================ \n";
+    cout << " | "
+        << setw(widthhead) << center("ПОЛЬЗОВАТЕЛИ", widthhead) << " |\n";
+    cout << " ================================================================================================ \n";
+    cout << " | "
+        << setw(u_widthId) << left << "Id" << " | "
+        << setw(u_widthLogin) << left << "Логин" << " | "
+        << setw(u_widthRole) << left << "Роль" << " | "
+        << setw(u_widthRegBy) << left << "Зарегистрировал" << " | "
+        << setw(u_widthDate) << left << "Дата" << " |\n";
+}
+
+void ConsolUI::printUserRow(const User& u)
+{
+    cout << " --------------------------------------------------------------------------------------------- \n";
+    cout << " | "
+        << setw(u_widthId) << left << u.getId() << " | "
+        << setw(u_widthLogin) << left << u.getName() << " | "
+        << setw(u_widthRole) << left << User::roleToString(u.getRole()) << " | "
+        << setw(u_widthRegBy) << left << u.getRegisteredBy() << " | "
+        << setw(u_widthDate) << left << u.getDate() << " |\n";
+}
+
+void ConsolUI::printUsers(const std::vector<User>& users)
+{
+    if (users.empty()) { printNoUsers(); return; }
+    printUserHead();
+    for (const auto& u : users) printUserRow(u);
+    cout << " ================================================================================================ \n";
+}
+
+void ConsolUI::printNoUsers()
+{
+    cout << " --------------------------------- \n";
+    cout << " | Нет зарегистрированных пользователей |\n";
+    cout << " --------------------------------- \n";
 }

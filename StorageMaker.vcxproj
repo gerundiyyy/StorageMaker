@@ -29,6 +29,7 @@
     <ClCompile Include="src\ProductStorage.cpp" />
     <ClCompile Include="src\User.cpp" />
     <ClCompile Include="src\UserManager.cpp" />
+    <ClCompile Include="src\UserStorage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h" />
@@ -44,9 +45,11 @@
     <ClInclude Include="include\ProductStorage.h" />
     <ClInclude Include="include\User.h" />
     <ClInclude Include="include\UserManager.h" />
+    <ClInclude Include="include\UserStorage.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\product_data.txt" />
+    <Text Include="data\users.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

@@ -45,6 +45,9 @@
     <ClCompile Include="src\UserManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\UserStorage.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\App.h">
@@ -86,9 +89,15 @@
     <ClInclude Include="include\UserManager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="include\UserStorage.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\product_data.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="data\users.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
   </ItemGroup>
