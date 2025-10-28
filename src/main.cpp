@@ -12,20 +12,8 @@
 int main()
 {
     try {
-        ConsolUI ui;
-        InputManager in(ui);
-        ProductManager productDb;
-        productDb.initializeDB("data/product_data.txt");
-        UserManager userDb("data/users.txt");
-        userDb.load();
-        ItemExtractor<Product> productExtractor;
-        ProductStorage productStorage(productExtractor, in, ui);
-        productStorage.loadItems(productDb);
-        AuthManager auth(userDb, ui, in);
-        App app(productDb, productStorage, userDb, auth, ui, in);
-
+        App app;
         app.run();
-
         return 0;
     }
     catch (const std::exception& e) {

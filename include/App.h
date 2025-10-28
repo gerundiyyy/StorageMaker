@@ -12,22 +12,18 @@
 
 class App {
 public:
-    App(ProductManager& pdb,
-        ProductStorage& pstorage,
-        UserManager& um,
-        AuthManager& auth,
-        ConsolUI& ui,
-        InputManager& in);
+    App();
 
     void run();
 
 private:
-    ProductManager* db_;
-    ProductStorage* storage_;
-    UserManager* users_;
-    AuthManager* auth_;
-    ConsolUI* ui_;
-    InputManager* in_;
+    ConsolUI ui_;
+    InputManager in_;
+    ItemExtractor<Product> productExtractor_;
+    ProductManager db_;
+    UserManager users_;
+    ProductStorage storage_;
+    AuthManager auth_;
 
     void appMenu();
     void printAll();
