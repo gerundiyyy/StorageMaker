@@ -1,12 +1,4 @@
-﻿#include "ProductManager.h"
-#include "ProductStorage.h"
-#include "UserManager.h"
-#include "AuthManager.h"
-#include "ConsolUI.h"
-#include "InputManager.h"
-#include "ItemExtractor.h"
-#include "App.h"
-
+﻿#include "App.h"
 #include <iostream>
 
 int main()
@@ -17,11 +9,11 @@ int main()
         return 0;
     }
     catch (const std::exception& e) {
-        std::cerr << "Fatal error: " << e.what() << std::endl;
+        std::cerr << "Ошибка! : " << e.what() << std::endl;
         return 1;
     }
     catch (...) {
-        std::cerr << "Unknown fatal error\n";
+        std::cerr << "Неизвестная ошибка!\n";
         return 2;
     }
 }

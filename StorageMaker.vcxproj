@@ -27,7 +27,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Product.cpp" />
     <ClCompile Include="src\ProductStorage.cpp" />
-    <ClCompile Include="src\User.cpp" />
     <ClCompile Include="src\UserManager.cpp" />
     <ClCompile Include="src\UserStorage.cpp" />
   </ItemGroup>

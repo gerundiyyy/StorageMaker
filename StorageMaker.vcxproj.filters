@@ -39,9 +39,6 @@
     <ClCompile Include="src\ProductStorage.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\User.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\UserManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
